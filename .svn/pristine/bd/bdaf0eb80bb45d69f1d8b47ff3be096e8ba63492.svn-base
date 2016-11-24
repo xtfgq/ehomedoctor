@@ -1,0 +1,66 @@
+[
+    {
+        "merged": "D:\\ehomefordoctor\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi\\icon_rest.png",
+        "source": "D:\\ehomefordoctor\\app\\src\\main\\res\\mipmap-hdpi\\icon_rest.png"
+    },
+    {
+        "merged": "D:\\ehomefordoctor\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi\\icon_message_normal.png",
+        "source": "D:\\ehomefordoctor\\app\\src\\main\\res\\mipmap-hdpi\\icon_message_normal.png"
+    },
+    {
+        "merged": "D:\\ehomefordoctor\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi\\icon_online.png",
+        "source": "D:\\ehomefordoctor\\app\\src\\main\\res\\mipmap-hdpi\\icon_online.png"
+    },
+    {
+        "merged": "D:\\ehomefordoctor\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi\\icon.png",
+        "source": "D:\\ehomefordoctor\\app\\src\\main\\res\\mipmap-hdpi\\icon.png"
+    },
+    {
+        "merged": "D:\\ehomefordoctor\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi\\bg_nav.png",
+        "source": "D:\\ehomefordoctor\\app\\src\\main\\res\\mipmap-hdpi\\bg_nav.png"
+    },
+    {
+        "merged": "D:\\ehomefordoctor\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi\\icon_online_g.png",
+        "source": "D:\\ehomefordoctor\\app\\src\\main\\res\\mipmap-hdpi\\icon_online_g.png"
+    },
+    {
+        "merged": "D:\\ehomefordoctor\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi\\icon_huanzhe_normal.png",
+        "source": "D:\\ehomefordoctor\\app\\src\\main\\res\\mipmap-hdpi\\icon_huanzhe_normal.png"
+    },
+    {
+        "merged": "D:\\ehomefordoctor\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi\\icon_huanzhe_pressed.png",
+        "source": "D:\\ehomefordoctor\\app\\src\\main\\res\\mipmap-hdpi\\icon_huanzhe_pressed.png"
+    },
+    {
+        "merged": "D:\\ehomefordoctor\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi\\weizhi.png",
+        "source": "D:\\ehomefordoctor\\app\\src\\main\\res\\mipmap-hdpi\\weizhi.png"
+    },
+    {
+        "merged": "D:\\ehomefordoctor\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi\\ic_launcher.png",
+        "source": "D:\\ehomefordoctor\\app\\src\\main\\res\\mipmap-hdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "D:\\ehomefordoctor\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi\\bgstart.png",
+        "source": "D:\\ehomefordoctor\\app\\src\\main\\res\\mipmap-hdpi\\bgstart.png"
+    },
+    {
+        "merged": "D:\\ehomefordoctor\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi\\icon_message_pressed.png",
+        "source": "D:\\ehomefordoctor\\app\\src\\main\\res\\mipmap-hdpi\\icon_message_pressed.png"
+    },
+    {
+        "merged": "D:\\ehomefordoctor\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi\\icon_key.png",
+        "source": "D:\\ehomefordoctor\\app\\src\\main\\res\\mipmap-hdpi\\icon_key.png"
+    },
+    {
+        "merged": "D:\\ehomefordoctor\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi\\icon_user.png",
+        "source": "D:\\ehomefordoctor\\app\\src\\main\\res\\mipmap-hdpi\\icon_user.png"
+    },
+    {
+        "merged": "D:\\ehomefordoctor\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi\\icon_message.png",
+        "source": "D:\\ehomefordoctor\\app\\src\\main\\res\\mipmap-hdpi\\icon_message.png"
+    },
+    {
+        "merged": "D:\\ehomefordoctor\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-hdpi\\icon_arrow_left.png",
+        "source": "D:\\ehomefordoctor\\app\\src\\main\\res\\mipmap-hdpi\\icon_arrow_left.png"
+    }
+]

@@ -1,0 +1,26 @@
+package com.zzu.ehome.ehomefordoctor.adapter;
+
+import android.content.Context;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.zzu.ehome.ehomefordoctor.R;
+
+import java.util.List;
+
+/**
+ * Created by Mersens on 2016/9/29.
+ */
+
+public class HZAdapter extends BaseListAdapter<String> {
+
+    public HZAdapter(Context context, List<String> objects) {
+        super(context, objects);
+    }
+
+    @Override
+    public View getGqView(int position, View convertView, ViewGroup parent) {
+        View view=getInflater().inflate(R.layout.item_hz,null);
+        return view;
+    }
+}

@@ -1,0 +1,22 @@
+package com.zzu.ehome.ehomefordoctor.mvp.model;
+
+import com.zzu.ehome.ehomefordoctor.mvp.listener.IHzInfo;
+import com.zzu.ehome.ehomefordoctor.mvp.listener.OnHzInfoListener;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Created by Mersens on 2016/9/29.
+ */
+
+public class IHzInfoImpl implements IHzInfo {
+    @Override
+    public void getInfo(OnHzInfoListener listener) {
+        List<String> list=new ArrayList<>();
+        list.add("小明");
+        list.add("小王");
+        list.add("小李");
+        listener.OnSuccess(list);
+    }
+}

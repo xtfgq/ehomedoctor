@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/base_color_text_white"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <include layout="@layout/layout_toolbar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/layout_xt"
+            android:layout_width="match_parent"
+            android:layout_height="52dp">
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/base_color_text_black"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:text="血糖"
+                />
+            <ImageView
+
+                android:layout_width="10dp"
+                android:layout_height="22dp"
+                android:src="@mipmap/icon_arrow_r"
+                android:layout_marginRight="4dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/color_line_text" />
+        <RelativeLayout
+            android:id="@+id/layout_xy"
+            android:layout_width="match_parent"
+            android:layout_height="52dp">
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/base_color_text_black"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:text="血压"
+                />
+            <ImageView
+
+                android:layout_width="10dp"
+                android:layout_height="22dp"
+                android:src="@mipmap/icon_arrow_r"
+                android:layout_marginRight="4dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/color_line_text" />
+        <RelativeLayout
+            android:id="@+id/layout_nx"
+            android:layout_width="match_parent"
+            android:layout_height="52dp">
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/base_color_text_black"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:text="尿酸"
+                />
+            <ImageView
+                android:layout_width="10dp"
+                android:layout_height="22dp"
+                android:src="@mipmap/icon_arrow_r"
+                android:layout_marginRight="4dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/color_line_text" />
+        <RelativeLayout
+            android:id="@+id/layout_dgc"
+            android:layout_width="match_parent"
+            android:layout_height="52dp">
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/base_color_text_black"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:text="胆固醇"
+                />
+            <ImageView
+                android:layout_width="10dp"
+                android:layout_height="22dp"
+                android:src="@mipmap/icon_arrow_r"
+                android:layout_marginRight="4dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/color_line_text" />
+       <!-- <RelativeLayout
+            android:id="@+id/layout_xcg"
+            android:layout_width="match_parent"
+            android:layout_height="52dp">
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/base_color_text_black"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:text="血常规"
+                />
+            <ImageView
+                android:layout_width="10dp"
+                android:layout_height="22dp"
+                android:src="@mipmap/icon_arrow_r"
+                android:layout_marginRight="4dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>-->
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/color_line_text" />
+
+    </LinearLayout>
+</LinearLayout>
