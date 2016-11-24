@@ -1,5 +1,0 @@
-<com.zzu.ehome.ehomefordoctor.view.HeadView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/common_actionbar"
-    android:layout_width="match_parent"
-    android:layout_height="36dp">
-</com.zzu.ehome.ehomefordoctor.view.HeadView>
