@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -130,10 +131,7 @@ public class HZFragment extends BaseFragment implements IHzInfoView {
             if (mList.get(0).getResultBean() == null) {
                 setDatas(mList);
                 for (UsersBySignDoctor bean : mList) {
-
                         RongIM.getInstance().refreshUserInfoCache(new UserInfo(bean.getUser_RegisterId(), bean.getUser_FullName(), Uri.parse(bean.getUser_Icon())));
-
-
                 }
 //                RongIM.getInstance().setMessageAttachedUserInfo(true);
                 progressStateLayout.showContent();
@@ -150,40 +148,41 @@ public class HZFragment extends BaseFragment implements IHzInfoView {
     }
 
     public void setDatas(List<UsersBySignDoctor> list) {
-        mAdapter = new ContactAdapter(getActivity(), list);
-        listView.setAdapter(mAdapter);
-      final StickyRecyclerHeadersDecoration headersDecor = new StickyRecyclerHeadersDecoration(mAdapter);
-//        if(!isRefresh){
-           listView.addItemDecoration(headersDecor);
-//        }
-
-        contactZsidebar.setupWithRecycler(listView);
-        mAdapter.setOnItemClickListener(new ContactAdapter.OnRecyclerViewItemClickListener() {
-            @Override
-            public <T> void onItemClick(View view, T t) {
-                UsersBySignDoctor u = (UsersBySignDoctor) t;
+        if(mAdapter==null){
+            mAdapter = new ContactAdapter(getActivity(), list);
+            listView.setAdapter(mAdapter);
+            final StickyRecyclerHeadersDecoration headersDecor = new StickyRecyclerHeadersDecoration(mAdapter);
+            listView.addItemDecoration(headersDecor);
+            contactZsidebar.setupWithRecycler(listView);
+            mAdapter.setOnItemClickListener(new ContactAdapter.OnRecyclerViewItemClickListener() {
+                @Override
+                public <T> void onItemClick(View view, T t) {
+                    UsersBySignDoctor u = (UsersBySignDoctor) t;
 //                RongIM.getInstance().refreshUserInfoCache(new UserInfo("51064", "啊明", Uri.parse("http://rongcloud-web.qiniudn.com/docs_demo_rongcloud_logo.png")));
-                RongIM.getInstance().refreshUserInfoCache(new UserInfo(u.getUser_RegisterId(), u.getUser_FullName(), Uri.parse(u.getUser_Icon())));
-                RongIM.getInstance().startPrivateChat(getActivity(), u.getUser_RegisterId(), u.getUser_FullName());
-
-            }
-        });
+                    RongIM.getInstance().refreshUserInfoCache(new UserInfo(u.getUser_RegisterId(), u.getUser_FullName(), Uri.parse(u.getUser_Icon())));
+                    RongIM.getInstance().startPrivateChat(getActivity(), u.getUser_RegisterId(), u.getUser_FullName());
+                }
+            });
+        }else{
+            mAdapter.setLists(list);
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
     public void onErroe(Exception e) {
+        Log.e("onErroe",e.toString());
         progressStateLayout.showError(new ProgressStateLayout.ReloadListener() {
             @Override
             public void onClick() {
                 presenter.doGetInfo();
             }
         });
-
     }
     public void refush(){
         isRefresh=true;
-
         presenter.doGetInfo();
 
     }
+
 }

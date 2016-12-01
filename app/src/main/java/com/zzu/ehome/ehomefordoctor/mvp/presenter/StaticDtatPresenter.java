@@ -18,7 +18,7 @@ public class StaticDtatPresenter {
     }
 
     public void getStaticData(){
-        mIStaticData.getDynamicData(mIDynamicView.getUserid(), new OnCommonResultListener() {
+        mIStaticData.getStaticData(mIDynamicView.getUserid(), new OnCommonResultListener() {
             @Override
             public <T> void onSuccess(T t) {
                 mIDynamicView.onSuccess(t);

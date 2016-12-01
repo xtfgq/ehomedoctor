@@ -21,7 +21,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import com.igexin.sdk.PushManager;
 import com.zzu.ehome.ehomefordoctor.R;
 import com.zzu.ehome.ehomefordoctor.app.App;
@@ -40,7 +40,6 @@ import com.zzu.ehome.ehomefordoctor.utils.SharePreferenceUtil;
 import com.zzu.ehome.ehomefordoctor.view.CommonDialog;
 import com.zzu.ehome.ehomefordoctor.view.DialogEnsureCancelView;
 import com.zzu.ehome.ehomefordoctor.view.DialogTips;
-import com.zzu.ehome.ehomefordoctor.view.HeadView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -50,8 +49,6 @@ import io.rong.imkit.fragment.ConversationListFragment;
 import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
 import io.rong.imlib.model.UserInfo;
-
-import static io.rong.imlib.statistics.UserData.name;
 
 public class MainActivity extends BaseActivity implements IOnLineView,IOffLineView,IUpView {
     private static final int REQUEST_PERMISSION = 0;
@@ -187,7 +184,7 @@ public class MainActivity extends BaseActivity implements IOnLineView,IOffLineVi
                     iconState.setImageResource(R.mipmap.icon_online);
                     mHzOfflinePresenter.postOffline();
                     RongIM.getInstance().logout();
-
+                    RongIM.getInstance().disconnect();
                 }
                 indexButton++;
 
@@ -195,6 +192,8 @@ public class MainActivity extends BaseActivity implements IOnLineView,IOffLineVi
         }
         selectItem(index);
     }
+
+
 
     private void selectItem(int index) {
         if (currentTabIndex != index) {

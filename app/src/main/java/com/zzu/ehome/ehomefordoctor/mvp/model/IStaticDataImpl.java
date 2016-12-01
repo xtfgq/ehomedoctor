@@ -32,7 +32,7 @@ public class IStaticDataImpl implements IStaticData {
         manager=RequestManager.getInstance();
     }
     @Override
-    public void getDynamicData(String userid, final OnCommonResultListener listener) {
+    public void getStaticData(String userid, final OnCommonResultListener listener) {
         Map<String,String> map=new HashMap<>();
         map.put("UserID",userid);
         map.put("StartDate","");
@@ -47,10 +47,12 @@ public class IStaticDataImpl implements IStaticData {
                 try {
                     JSONObject mySO = new JSONObject(msg);
                     JSONArray array = mySO.getJSONArray("Result");
-                    int code = Integer.valueOf(array.getJSONObject(0).getString("MessageCode"));
-                    if(code!=0){
-                        JSONObject mySORel = array.getJSONObject(0).getJSONObject("MessageContent").getJSONObject("resultDetail");
-                        StaticDate date = JsonTools.getData(mySORel.toString(), StaticDate.class);
+                    JSONArray arrayContent = array.getJSONObject(0).getJSONArray("MessageContent");
+                    int length = arrayContent.length();
+
+                    if(length!=0){
+                        JSONObject s = array.getJSONObject(0);
+                        StaticDate date = JsonTools.getData(s.toString(), StaticDate.class);
                         List<StaticBean> list = date.getData();
                         listener.onSuccess(list);
                     }else{

@@ -77,12 +77,12 @@ public class StaticFragment extends BaseFragment implements IDynamicView {
                 final StaticBean item = adapter.getItem(position);
 
                 if(item.getImgPath().contains("pdf")){
-                    Intent i = new Intent(mContext, ECGPDFStaticActivity.class);
+                    Intent i = new Intent(getActivity(), ECGPDFStaticActivity.class);
                     i.putExtra("imurl", item.getImgPath());
                     i.putExtra("Diagnosis", item.getDiagnosis());
                     i.putExtra("PatientName", item.getPatientName());
                     i.putExtra("CollectTime", item.getCollectTime());
-                    mContext.startActivity(i);
+                    getActivity().startActivity(i);
                 }else{
                     Intent i = new Intent(getActivity(), StaticECGDetailActivity.class);
                     i.putExtra("imurl", item.getImgPath());

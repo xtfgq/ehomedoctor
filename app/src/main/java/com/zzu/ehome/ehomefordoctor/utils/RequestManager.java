@@ -124,7 +124,7 @@ public class RequestManager {
                 .subscribe(new Observer<Object>() {
                     @Override
                     public void onCompleted() {
-                        callBack.onFinish();
+                         callBack.onFinish();
                     }
 
                     @Override

@@ -15,8 +15,8 @@
             app:riv_border_color="#ffffff"
             app:riv_mutate_background="true"
             app:riv_oval="false"
-            android:layout_height="45dp"
-            android:layout_width="45dp"
+            android:layout_height="46dp"
+            android:layout_width="46dp"
             android:layout_gravity="center"
             android:src="@drawable/iocn_tx_user1" />
 
@@ -24,7 +24,7 @@
     <RelativeLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_marginLeft="12dp"
+        android:layout_marginLeft="8dp"
         android:layout_weight="1">
 
         <TextView
@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:text="Mersens"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
     </RelativeLayout>
 
 

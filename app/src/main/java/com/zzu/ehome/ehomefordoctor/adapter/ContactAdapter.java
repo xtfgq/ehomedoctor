@@ -33,6 +33,11 @@ public class ContactAdapter extends BaseAdapter<UsersBySignDoctor, ContactAdapte
         this.addAll(mLists);
     }
 
+    public void setLists(List<UsersBySignDoctor> mLists){
+        this.mLists=mLists;
+    }
+
+
     @Override
     public ContactAdapter.ContactViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -49,13 +54,15 @@ public class ContactAdapter extends BaseAdapter<UsersBySignDoctor, ContactAdapte
             if(imgurl.contains("vine.gif")){
                 holder.mIcon.setImageResource(R.drawable.rc_ic_def_coversation_portrait);
             }else {
-
                Glide.with(mContext).load(imgurl).into(holder.mIcon);
             }
         }
         holder.itemView.setTag(getItem(position));
     }
-
+    @Override
+    public int getItemCount() {
+        return mLists == null ? 0 : mLists.size();
+    }
     @Override
     public long getHeaderId(int position) {
         return getItem(position).getSortLetters().charAt(0);

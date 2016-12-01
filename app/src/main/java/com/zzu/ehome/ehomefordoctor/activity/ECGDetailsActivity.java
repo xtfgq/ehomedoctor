@@ -14,8 +14,15 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dinuscxj.progressbar.CircleProgressBar;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.request.GetRequest;
+import com.lzy.okserver.download.DownloadInfo;
+import com.lzy.okserver.download.DownloadManager;
+import com.lzy.okserver.download.DownloadService;
+import com.lzy.okserver.listener.DownloadListener;
 import com.zzu.ehome.ehomefordoctor.R;
 import com.zzu.ehome.ehomefordoctor.utils.DownloadProgressListener;
 import com.zzu.ehome.ehomefordoctor.utils.FileDownloader;
@@ -29,6 +36,10 @@ import java.net.URLEncoder;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.zzu.ehome.ehomefordoctor.R.id.rl_check;
+import static com.zzu.ehome.ehomefordoctor.R.id.tv_statu;
+import static io.rong.imlib.statistics.UserData.username;
 
 /**
  * Created by Mersens on 2016/10/26.
@@ -45,7 +56,7 @@ public class ECGDetailsActivity extends BaseActivity {
     TextView tv3;
     @BindView(R.id.tvname)
     TextView tvname;
-    @BindView(R.id.tv_statu)
+    @BindView(tv_statu)
     TextView tvStatu;
     @BindView(R.id.tvresult)
     TextView tvresult;
@@ -55,17 +66,19 @@ public class ECGDetailsActivity extends BaseActivity {
     TextView tvcontent;
     @BindView(R.id.line_progress)
     CircleProgressBar lineProgress;
-    @BindView(R.id.rl_check)
+    @BindView(rl_check)
     RelativeLayout rlCheck;
     private Intent mIntent;
-    private Boolean isExists = false;
-    private String filename, filemd5,username;
+
+    private String filename, username;
     private String url = "", status;
     long filesize;
     int result;
+    private DownloadManager downloadManager;
+    private DownloadInfo downloadInfo;
 
     public static final String SDCARD_PATH = Environment.getExternalStorageDirectory().toString();
-    public final String DOWM_FOLDER = SDCARD_PATH + File.separator + "ehome2" + File.separator + "download" + File.separator;
+    public final String DOWM_FOLDER = SDCARD_PATH + File.separator + "ehomedoc" + File.separator + "download" + File.separator;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,7 +97,7 @@ public class ECGDetailsActivity extends BaseActivity {
             }
         });
         mIntent = this.getIntent();
-        filemd5 = mIntent.getStringExtra("FileMD5");
+
         status = mIntent.getStringExtra("ReportType");
         username=mIntent.getStringExtra("username");
         filename = mIntent.getStringExtra("Fid").trim()+".pdf";
@@ -97,6 +110,10 @@ public class ECGDetailsActivity extends BaseActivity {
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }
+        downloadManager = DownloadService.getDownloadManager();
+        downloadManager.setTargetFolder(DOWM_FOLDER);
+        downloadInfo = downloadManager.getDownloadInfo(url);
+
         tvStatu.setText(status);
         tvtime.setText(mIntent.getStringExtra("time"));
         tvname.setText(username);
@@ -107,94 +124,31 @@ public class ECGDetailsActivity extends BaseActivity {
         } else if (status.contains("高")) {
             tvStatu.setTextColor(Color.parseColor("#f95935"));
         }
+        lineProgress.setVisibility(View.GONE);
+        if (downloadInfo != null) {
+            if(downloadInfo.getState() == DownloadManager.FINISH){
+                lineProgress.setVisibility(View.GONE);
+                tvcontent.setText("打开文件");
+            }else if(downloadInfo.getState() == DownloadManager.PAUSE){
+                lineProgress.setVisibility(View.VISIBLE);
+                result=(int)(Math.round(downloadInfo.getProgress() * 10000) * 1.0f / 100);
+                lineProgress.setProgress(result);
+                tvcontent.setText("继续下载细报告内容");
+            }else if(downloadInfo.getState()==DownloadManager.ERROR){
+                lineProgress.setVisibility(View.GONE);
+                tvcontent.setText("重新下载细报告内容");
+            }
+        }else{
+            tvcontent.setText("下载详细报告内容");
+        }
+        initEvent();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             getPermission();
         }
-        lineProgress.setVisibility(View.GONE);
-        File file = new File(DOWM_FOLDER + filename);
-        if (file.exists()) {
-            tvcontent.setText("打开详细报告");
-            isExists = true;
-        } else {
-            tvcontent.setText("下载详细报告内容");
-        }
-        rlCheck.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isExists) {
-                    openFolder(DOWM_FOLDER + filename);
-                } else {
-                    if (result > 0) {
-                        return;
-                    }
-                    if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                        download(url, new File(DOWM_FOLDER),filename);
-                    } else {
-                        ToastUtils.showMessage(ECGDetailsActivity.this, "读取失败!");
-                    }
-                }
-            }
-        });
     }
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case 1:
-                    float num = (float) msg.getData().getInt("size") / (float) filesize;
-                    result = (int) (num * 100);
-                    lineProgress.setProgress(result);
-                    lineProgress.setVisibility(View.VISIBLE);
-                    //显示下载成功信息
-                    if (lineProgress.getProgress() == lineProgress.getMax()) {
-                        ToastUtils.showMessage(ECGDetailsActivity.this, "下载成功" + "请到" + DOWM_FOLDER + "查看");
-                        openFolder(DOWM_FOLDER + filename);
-                        lineProgress.setVisibility(View.GONE);
-                        tvcontent.setText("打开文件");
-                        isExists = true;
-                    }
-                    break;
-                case -1:
-                    //显示下载错误信息
-                    File file = new File(DOWM_FOLDER + filename);
-                    if(file.exists()){file.delete();}
-                    ToastUtils.showMessage(ECGDetailsActivity.this, "下载失败!");
-                    break;
-            }
-        }
-    };
 
-    /**
-     * 主线程(UI线程)
-     * 对于显示控件的界面更新只是由UI线程负责，如果是在非UI线程更新控件的属性值，更新后的显示界面不会反映到屏幕上
-     * 如果想让更新后的显示界面反映到屏幕上，需要用Handler设置。
-     *
-     * @param path
-     * @param savedir
-     */
-    private void download(final String path, final File savedir,final String filename) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    FileDownloader loader = new FileDownloader(ECGDetailsActivity.this, path, savedir, filename,4);
-                    filesize = loader.getFileSize();
-                    lineProgress.setMax(100);//设置进度条的最大刻度为文件的长度
-                    loader.download(new DownloadProgressListener() {
-                        @Override
-                        public void onDownloadSize(int size) {//实时获知文件已经下载的数据长度
-                            Message msg = new Message();
-                            msg.what = 1;
-                            msg.getData().putInt("size", size);
-                            handler.sendMessage(msg);//发送消息
-                        }
-                    });
-                } catch (Exception e) {
-                    handler.obtainMessage(-1).sendToTarget();
-                }
-            }
-        }).start();
-    }
+
+
 
     public void openFolder(String filename) {
         Intent intent = new Intent("android.intent.action.VIEW");
@@ -204,6 +158,70 @@ public class ECGDetailsActivity extends BaseActivity {
                 File(filename));
         intent.setDataAndType(uri, "application/pdf");
         this.startActivity(intent);
+    }
+    public void initEvent() {
+        rlCheck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (downloadInfo != null) {
+                    if (downloadInfo.getState() == DownloadManager.FINISH) {
+                        tvcontent.setText("打开文件");
+                        lineProgress.setVisibility(View.GONE);
+                        openFolder(DOWM_FOLDER + filename);
+                    } else if (downloadInfo.getState() == DownloadManager.PAUSE) {
+                        downloadManager.startAllTask();
+                        lineProgress.setVisibility(View.VISIBLE);
+                        tvcontent.setText("正在下载详细报告内容...");
+                    } else if (downloadInfo.getState() == DownloadManager.DOWNLOADING) {
+                        lineProgress.setVisibility(View.VISIBLE);
+                        downloadManager.pauseTask(url);
+                        tvcontent.setText("继续下载详细报告内容");
+                    } else if (downloadInfo.getState() == DownloadManager.ERROR) {
+                        lineProgress.setVisibility(View.VISIBLE);
+                        downloadManager.restartTask(url);
+                        tvcontent.setText("正在下载详细报告内容...");
+                    }
+                } else {
+                    GetRequest request = OkGo.get(url);
+                    downloadManager.addTask(filename,url, request, null);
+                    downloadInfo = downloadManager.getDownloadInfo(url);
+                    lineProgress.setVisibility(View.VISIBLE);
+                    downloadManager.startAllTask();
+                    DownloadListener downloadListener = new MyDownloadListener();
+                    downloadInfo.setListener(downloadListener);
+                    tvcontent.setText("正在下载详细报告内容...");
+                }
+
+            }
+        });
+        if(downloadInfo!=null) {
+            DownloadListener downloadListener = new MyDownloadListener();
+            downloadInfo.setListener(downloadListener);
+        }
+    }
+    private class MyDownloadListener extends DownloadListener {
+
+        @Override
+        public void onProgress(DownloadInfo downloadInfo) {
+            Long length=downloadInfo.getDownloadLength();
+            Long size=downloadInfo.getTotalLength();
+            result=(int)(Math.round(downloadInfo.getProgress() * 10000) * 1.0f / 100);
+            lineProgress.setProgress(result);
+        }
+
+        @Override
+        public void onFinish(DownloadInfo downloadInfo) {
+            Toast.makeText(ECGDetailsActivity.this, "下载完成:" + downloadInfo.getTargetPath(), Toast.LENGTH_SHORT).show();
+            tvcontent.setText("打开文件");
+        }
+
+        @Override
+        public void onError(DownloadInfo downloadInfo, String errorMsg, Exception e) {
+            if (errorMsg != null) {
+                Toast.makeText(ECGDetailsActivity.this, "下载失败", Toast.LENGTH_SHORT).show();
+                tvcontent.setText("重新下载详细报告内容");
+            }
+        }
     }
 
 
