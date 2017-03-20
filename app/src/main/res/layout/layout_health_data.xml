@@ -72,7 +72,8 @@
         <RelativeLayout
             android:id="@+id/layout_nx"
             android:layout_width="match_parent"
-            android:layout_height="52dp">
+            android:layout_height="52dp"
+            android:visibility="gone">
             <TextView
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
@@ -91,13 +92,14 @@
                 android:layout_alignParentRight="true" />
         </RelativeLayout>
 
-        <View
+      <!--  <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/color_line_text" />
+            android:background="@color/color_line_text" />-->
         <RelativeLayout
             android:id="@+id/layout_dgc"
             android:layout_width="match_parent"
+            android:visibility="gone"
             android:layout_height="52dp">
             <TextView
                 android:layout_height="wrap_content"
@@ -117,10 +119,10 @@
                 android:layout_alignParentRight="true" />
         </RelativeLayout>
 
-        <View
+   <!--     <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/color_line_text" />
+            android:background="@color/color_line_text" />-->
        <!-- <RelativeLayout
             android:id="@+id/layout_xcg"
             android:layout_width="match_parent"
@@ -143,10 +145,10 @@
                 android:layout_alignParentRight="true" />
         </RelativeLayout>-->
 
-        <View
+<!--        <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/color_line_text" />
+            android:background="@color/color_line_text" />-->
 
     </LinearLayout>
 </LinearLayout>

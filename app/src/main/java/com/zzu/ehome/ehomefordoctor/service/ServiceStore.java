@@ -64,9 +64,9 @@ public interface ServiceStore {
 
     @Headers({
             "Content-Type: text/xml; charset=utf-8",
-            "SOAPAction: http://www.topmd.cn/TopmdWeixin/BJResultInquiry"
+            "SOAPAction: http://tempuri.org/GetElectrocardio"
     })
-    @POST(Constans.JE_BASE_URL3+"/TopmdWeiXin.asmx")
+    @POST("WebServices/EhomeWebservice.asmx")
     Call<ResponseBody> getStaticData(@retrofit2.http.Body String str);
 
 
@@ -163,4 +163,17 @@ public interface ServiceStore {
     })
     @POST("WebServices/EhomeWebservice.asmx")
     Call<ResponseBody> getUpdata(@retrofit2.http.Body String str);
+    @Headers({
+            "Content-Type: text/xml; charset=utf-8",
+            "SOAPAction: http://tempuri.org/MeidicalReportInquiry"
+    })
+    @POST("WebServices/EhomeWebservice.asmx")
+    Call<ResponseBody> getMeidicalReport(@retrofit2.http.Body String str);
+
+    @Headers({
+            "Content-Type: text/xml; charset=utf-8",
+            "SOAPAction: http://tempuri.org/SignInquiry"
+    })
+    @POST("WebServices/EhomeWebservice.asmx")
+    Call<ResponseBody> getSignData(@retrofit2.http.Body String str);
 }

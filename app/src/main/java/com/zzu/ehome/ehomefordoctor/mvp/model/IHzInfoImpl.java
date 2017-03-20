@@ -60,7 +60,7 @@ public class IHzInfoImpl implements IHzInfo {
                 final List<UsersBySignDoctor> list = new ArrayList<UsersBySignDoctor>();
                 try {
                     JSONObject mySO = new JSONObject(msg);
-                    org.json.JSONArray array = mySO
+                   org.json.JSONArray array = mySO
                             .getJSONArray("MSUsersBySignDoctorInquiry");
                     if (array.getJSONObject(0).has("MessageCode")) {
                         UsersBySignDoctor ub = new UsersBySignDoctor();
@@ -73,10 +73,10 @@ public class IHzInfoImpl implements IHzInfo {
                         for (int i = 0; i < array.length(); i++) {
                             UsersBySignDoctor ub = new UsersBySignDoctor();
                             JSONObject jsonObject = (JSONObject) array.get(i);
-                            ub.setUser_FullName(jsonObject.getString("User_FullName"));
-                            ub.setUser_Name(jsonObject.getString("User_Name"));
-                            ub.setUser_RegisterId(jsonObject.getString("User_RegisterId"));
-                            String imgurl=jsonObject.getString("User_Icon");
+                            ub.setUser_FullName(jsonObject.getString("RealName"));
+                            ub.setUser_Name(jsonObject.getString("RealName"));
+                            ub.setUser_RegisterId(jsonObject.getString("UserID"));
+                            String imgurl=jsonObject.getString("PictureURL");
                             if(TextUtils.isEmpty(imgurl)||imgurl.contains("vine.gif")){
                                 ub.setUser_Icon("");
                             }else{
@@ -86,7 +86,8 @@ public class IHzInfoImpl implements IHzInfo {
                             if (TextUtils.isEmpty(username)) {
                                 ub.setSortLetters("#");
                             } else {
-                                String pinyin = characterParser.getSelling(username);
+                                String pinyin = characterParser.getSelling(username).trim();
+
                                 String sortString = pinyin.substring(0, 1).toUpperCase();
                                 if (sortString.matches("[A-Z]")) {
                                     ub.setSortLetters(sortString.toUpperCase());

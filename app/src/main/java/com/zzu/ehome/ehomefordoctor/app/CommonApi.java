@@ -37,6 +37,11 @@ public class CommonApi {
 
         void OnSuccess(String msg);
     }
+    public  interface UserInfoListener {
+
+        void OnSuccess(String msg);
+    }
+
 
 
     /**
@@ -134,6 +139,40 @@ public class CommonApi {
                 }
             });
         }
+    }
+    public static  void getUser(String userid,final UserInfoListener listener){
+        RequestManager manager=RequestManager.getInstance();
+        Map<String,String> map=new HashMap<>();
+        map.put("UserID",userid);
+        String result= Node.getResult("UserInquiry",map);
+        final ServiceStore service= manager.create(ServiceStore.class);
+        Call<ResponseBody> call=service.getUserDate(result);
+        manager.execute(call, new RequestManager.RequestCallBack() {
+            @Override
+            public void onSueecss(String msg) {
+                try {
+                    listener.OnSuccess(msg);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onError(String msg) {
+
+            }
+
+            @Override
+            public void onStart() {
+
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        });
     }
 
 }

@@ -16,8 +16,11 @@ import com.jiang.android.lib.adapter.expand.StickyRecyclerHeadersDecoration;
 import com.zzu.ehome.ehomefordoctor.R;
 import com.zzu.ehome.ehomefordoctor.adapter.ContactAdapter;
 import com.zzu.ehome.ehomefordoctor.entity.UsersBySignDoctor;
+import com.zzu.ehome.ehomefordoctor.mvp.model.IHzInfoImpl;
 import com.zzu.ehome.ehomefordoctor.mvp.presenter.HzInfoPresenter;
 import com.zzu.ehome.ehomefordoctor.mvp.view.IHzInfoView;
+import com.zzu.ehome.ehomefordoctor.utils.CommonUtils;
+import com.zzu.ehome.ehomefordoctor.utils.ToastUtils;
 import com.zzu.ehome.ehomefordoctor.view.ProgressStateLayout;
 import com.zzu.ehome.ehomefordoctor.view.SideBar;
 import com.zzu.ehome.ehomefordoctor.view.ZSideBar;
@@ -52,7 +55,25 @@ public class HZFragment extends BaseFragment implements IHzInfoView {
     private ContactAdapter mAdapter;
     private HzInfoPresenter presenter;
     private boolean isRefresh=false;
+    public List<UsersBySignDoctor> getmList() {
+        return mList;
+    }
+
+    public void setmList(List<UsersBySignDoctor> mList) {
+        this.mList = mList;
+    }
+
     private List<UsersBySignDoctor> mList=new ArrayList<>();
+
+    public boolean isClick() {
+        return isClick;
+    }
+
+    public void setClick(boolean click) {
+        isClick = click;
+    }
+
+    private boolean isClick=true;
 
 
     @Nullable
@@ -123,59 +144,62 @@ public class HZFragment extends BaseFragment implements IHzInfoView {
     public void onSuccess(List<UsersBySignDoctor> list) {
        if(isRefresh){
            mList.clear();
-          mList.addAll(list);
+         mList.addAll(list);
        }else{
            mList=list;
        }
         if (mList != null && mList.size() > 0) {
             if (mList.get(0).getResultBean() == null) {
-                setDatas(mList);
+
                 for (UsersBySignDoctor bean : mList) {
                         RongIM.getInstance().refreshUserInfoCache(new UserInfo(bean.getUser_RegisterId(), bean.getUser_FullName(), Uri.parse(bean.getUser_Icon())));
                 }
-//                RongIM.getInstance().setMessageAttachedUserInfo(true);
+                setDatas(mList);
+
                 progressStateLayout.showContent();
             } else {
-                progressStateLayout.showEmpty();
+                progressStateLayout.showEmpty(R.mipmap.icon_wuhuanzhe,"");
+
             }
         } else {
-            progressStateLayout.showEmpty();
+            progressStateLayout.showEmpty(R.mipmap.icon_wuhuanzhe,"");
         }
-//        if(isRefresh){
-//            swipeRefreshLayout.setRefreshing(false);
-//            isRefresh=false;
-//        }
+
     }
 
     public void setDatas(List<UsersBySignDoctor> list) {
-        if(mAdapter==null){
-            mAdapter = new ContactAdapter(getActivity(), list);
+
+
+             mAdapter = new ContactAdapter(getActivity(), list);
             listView.setAdapter(mAdapter);
-            final StickyRecyclerHeadersDecoration headersDecor = new StickyRecyclerHeadersDecoration(mAdapter);
+            StickyRecyclerHeadersDecoration headersDecor = new StickyRecyclerHeadersDecoration(mAdapter);
             listView.addItemDecoration(headersDecor);
             contactZsidebar.setupWithRecycler(listView);
             mAdapter.setOnItemClickListener(new ContactAdapter.OnRecyclerViewItemClickListener() {
                 @Override
                 public <T> void onItemClick(View view, T t) {
-                    UsersBySignDoctor u = (UsersBySignDoctor) t;
+                    if(isClick) {
+                        UsersBySignDoctor u = (UsersBySignDoctor) t;
 //                RongIM.getInstance().refreshUserInfoCache(new UserInfo("51064", "啊明", Uri.parse("http://rongcloud-web.qiniudn.com/docs_demo_rongcloud_logo.png")));
-                    RongIM.getInstance().refreshUserInfoCache(new UserInfo(u.getUser_RegisterId(), u.getUser_FullName(), Uri.parse(u.getUser_Icon())));
-                    RongIM.getInstance().startPrivateChat(getActivity(), u.getUser_RegisterId(), u.getUser_FullName());
+                        RongIM.getInstance().refreshUserInfoCache(new UserInfo(u.getUser_RegisterId(), u.getUser_FullName(), Uri.parse(u.getUser_Icon())));
+                        RongIM.getInstance().startPrivateChat(getActivity(), u.getUser_RegisterId(), u.getUser_FullName());
+                    }
                 }
             });
-        }else{
-            mAdapter.setLists(list);
-            mAdapter.notifyDataSetChanged();
-        }
+
     }
 
     @Override
     public void onErroe(Exception e) {
         Log.e("onErroe",e.toString());
+//        CommonUtils.saveCrashInfo2File(e);
+//       ToastUtils.showMessage(getActivity(),e.toString());
+        progressStateLayout.showEmpty(R.mipmap.icon_none,"数据加载失败"+e.toString());
         progressStateLayout.showError(new ProgressStateLayout.ReloadListener() {
             @Override
             public void onClick() {
                 presenter.doGetInfo();
+
             }
         });
     }
@@ -184,5 +208,10 @@ public class HZFragment extends BaseFragment implements IHzInfoView {
         presenter.doGetInfo();
 
     }
+
+
+
+
+
 
 }

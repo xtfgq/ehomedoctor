@@ -34,7 +34,12 @@ public class ContactAdapter extends BaseAdapter<UsersBySignDoctor, ContactAdapte
     }
 
     public void setLists(List<UsersBySignDoctor> mLists){
-        this.mLists=mLists;
+        this.mLists = mLists;
+//       this. mLists.addAll(mLists);
+//        notifyDataSetChanged();
+//       this.clear();
+//       this.addAll(this.mLists);
+//notifyDataSetChanged();
     }
 
 

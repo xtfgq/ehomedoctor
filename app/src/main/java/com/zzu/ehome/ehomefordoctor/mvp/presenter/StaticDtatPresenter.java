@@ -4,6 +4,7 @@ import com.zzu.ehome.ehomefordoctor.mvp.listener.IStaticData;
 import com.zzu.ehome.ehomefordoctor.mvp.listener.OnCommonResultListener;
 import com.zzu.ehome.ehomefordoctor.mvp.model.IStaticDataImpl;
 import com.zzu.ehome.ehomefordoctor.mvp.view.IDynamicView;
+import com.zzu.ehome.ehomefordoctor.mvp.view.IStaticView;
 
 /**
  * Created by Mersens on 2016/10/26.
@@ -11,17 +12,17 @@ import com.zzu.ehome.ehomefordoctor.mvp.view.IDynamicView;
 
 public class StaticDtatPresenter {
     private IStaticData mIStaticData;
-    private IDynamicView mIDynamicView;
-    public StaticDtatPresenter(IDynamicView view){
-        this.mIDynamicView=view;
+    private IStaticView mIStaticView;
+    public StaticDtatPresenter(IStaticView view){
+        this.mIStaticView=view;
         mIStaticData=new IStaticDataImpl();
     }
 
     public void getStaticData(){
-        mIStaticData.getStaticData(mIDynamicView.getUserid(), new OnCommonResultListener() {
+        mIStaticData.getStaticData(mIStaticView.getUserid(), mIStaticView.getCardNo(),new OnCommonResultListener() {
             @Override
             public <T> void onSuccess(T t) {
-                mIDynamicView.onSuccess(t);
+                mIStaticView.onSuccess(t);
             }
 
             @Override
@@ -31,7 +32,7 @@ public class StaticDtatPresenter {
 
             @Override
             public void onError(Exception e) {
-                mIDynamicView.onError();
+                mIStaticView.onError(e+"");
             }
 
             @Override

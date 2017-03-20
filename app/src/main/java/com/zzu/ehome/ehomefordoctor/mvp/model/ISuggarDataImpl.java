@@ -41,6 +41,7 @@ public class ISuggarDataImpl implements ISuggarData{
         map.put("StartTime",StartTime);
         map.put("EndTime",EndTime);
         map.put("Type",type);
+        map.put("Fromto", "01");
         String result= Node.getResult("BloodSugarInquiry",map);
         final ServiceStore service= manager.create(ServiceStore.class);
         Call<ResponseBody> call=service.getSuggarDate(result);

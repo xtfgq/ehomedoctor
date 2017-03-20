@@ -12,10 +12,15 @@ import android.widget.TextView;
 import com.zzu.ehome.ehomefordoctor.R;
 import com.zzu.ehome.ehomefordoctor.app.App;
 import com.zzu.ehome.ehomefordoctor.app.CommonApi;
+import com.zzu.ehome.ehomefordoctor.app.Constans;
+import com.zzu.ehome.ehomefordoctor.entity.User;
+import com.zzu.ehome.ehomefordoctor.entity.UserInfoDate;
 import com.zzu.ehome.ehomefordoctor.mvp.listener.Tool;
+import com.zzu.ehome.ehomefordoctor.utils.JsonTools;
 import com.zzu.ehome.ehomefordoctor.utils.SharePreferenceUtil;
 import com.zzu.ehome.ehomefordoctor.view.HeadView;
 
+import java.util.List;
 import java.util.Locale;
 
 import io.rong.imkit.RongIM;
@@ -72,9 +77,27 @@ public class ConversationActivity extends BaseActivity implements RongIM.Locatio
      */
     private void getIntentDate(Intent intent) {
         mTargetId = intent.getData().getQueryParameter("targetId");
-
+        getUser(mTargetId);
          name = getIntent().getData().getQueryParameter("title");
         mConversationType = Conversation.ConversationType.valueOf(intent.getData().getLastPathSegment().toUpperCase(Locale.getDefault()));
+    }
+    private  void getUser(String id){
+        CommonApi.getUser(id, new CommonApi.UserInfoListener() {
+            @Override
+            public void OnSuccess(String msg) {
+                UserInfoDate date = JsonTools.getData(msg.toString(), UserInfoDate.class);
+                List<User> list = date.getData();
+                User user = list.get(0);
+                String url=user.getImgHead();
+                if(url.contains("vine.gif")){
+                    url="";
+                }else{
+                    url= Constans.JE_BASE_URL3 + url.replace("~", "").replace("\\", "/");
+
+                }
+                RongIM.getInstance().refreshUserInfoCache(new UserInfo(user.getUserid(), user.getUsername(), Uri.parse(url)));
+            }
+        });
     }
 
 
@@ -131,7 +154,9 @@ public class ConversationActivity extends BaseActivity implements RongIM.Locatio
                     CommonApi.connent(token, new CommonApi.RongIMListener() {
                         @Override
                         public void OnSuccess(String userid) {
-
+                            RongIM.getInstance().setCurrentUserInfo(new UserInfo(SharePreferenceUtil.getInstance(ConversationActivity.this).getUserId(),
+                                    SharePreferenceUtil.getInstance(ConversationActivity.this).getNICK(), Uri.parse(SharePreferenceUtil.getInstance(ConversationActivity.this).getRongHead())));
+                            RongIM.getInstance().setMessageAttachedUserInfo(true);
                         }
                     });
                 } else {
@@ -139,6 +164,9 @@ public class ConversationActivity extends BaseActivity implements RongIM.Locatio
                         CommonApi.connent(token, new CommonApi.RongIMListener() {
                             @Override
                             public void OnSuccess(String userid) {
+                                RongIM.getInstance().setCurrentUserInfo(new UserInfo(SharePreferenceUtil.getInstance(ConversationActivity.this).getUserId(),
+                                        SharePreferenceUtil.getInstance(ConversationActivity.this).getNICK(), Uri.parse(SharePreferenceUtil.getInstance(ConversationActivity.this).getRongHead())));
+                                RongIM.getInstance().setMessageAttachedUserInfo(true);
                                 enterFragment(mConversationType, mTargetId);
                             }
                         });
@@ -159,7 +187,7 @@ public class ConversationActivity extends BaseActivity implements RongIM.Locatio
      * 设置 actionbar 事件
      */
     private void setActionBar() {
-        setDefaultTXViewMethod(R.mipmap.icon_arrow_left, name, "病历", new HeadView.OnLeftClickListener() {
+        setDefaultTXViewMethod(R.mipmap.icon_arrow_left, name, "详情", new HeadView.OnLeftClickListener() {
             @Override
             public void onClick() {
                 finish();

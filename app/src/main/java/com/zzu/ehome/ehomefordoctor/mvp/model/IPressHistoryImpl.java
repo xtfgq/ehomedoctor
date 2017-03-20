@@ -41,6 +41,7 @@ public class IPressHistoryImpl implements IPressHistory{
         map.put("PageSize",pagesize);
         map.put("PageIndex",pageindex);
         map.put("Type",type);
+        map.put("Fromto", "01");
         String result= Node.getResult("HealthDataInquiryWithPage",map);
         final ServiceStore service= manager.create(ServiceStore.class);
         Call<ResponseBody> call=service.getPressHistory(result);

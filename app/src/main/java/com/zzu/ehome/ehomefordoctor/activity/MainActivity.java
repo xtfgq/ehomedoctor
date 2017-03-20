@@ -26,20 +26,33 @@ import com.igexin.sdk.PushManager;
 import com.zzu.ehome.ehomefordoctor.R;
 import com.zzu.ehome.ehomefordoctor.app.App;
 import com.zzu.ehome.ehomefordoctor.app.CommonApi;
+import com.zzu.ehome.ehomefordoctor.app.Constans;
 import com.zzu.ehome.ehomefordoctor.entity.UpInfoBean;
+import com.zzu.ehome.ehomefordoctor.entity.User;
+import com.zzu.ehome.ehomefordoctor.entity.UserInfoDate;
+import com.zzu.ehome.ehomefordoctor.entity.UsersBySignDoctor;
 import com.zzu.ehome.ehomefordoctor.fragment.HZFragment;
 import com.zzu.ehome.ehomefordoctor.mvp.presenter.HzOfflinePresenter;
 import com.zzu.ehome.ehomefordoctor.mvp.presenter.HzOnlinePresenter;
 import com.zzu.ehome.ehomefordoctor.mvp.presenter.UpDataPresenter;
+import com.zzu.ehome.ehomefordoctor.mvp.presenter.UserDataPresenter;
 import com.zzu.ehome.ehomefordoctor.mvp.view.IOffLineView;
 import com.zzu.ehome.ehomefordoctor.mvp.view.IOnLineView;
 import com.zzu.ehome.ehomefordoctor.mvp.view.IUpView;
+import com.zzu.ehome.ehomefordoctor.mvp.view.IUserDateView;
+import com.zzu.ehome.ehomefordoctor.reciver.EventType;
+import com.zzu.ehome.ehomefordoctor.reciver.RxBus;
 import com.zzu.ehome.ehomefordoctor.service.DownloadServiceForAPK;
 import com.zzu.ehome.ehomefordoctor.utils.DialogUtils;
+import com.zzu.ehome.ehomefordoctor.utils.JsonTools;
 import com.zzu.ehome.ehomefordoctor.utils.SharePreferenceUtil;
+import com.zzu.ehome.ehomefordoctor.utils.ToastUtils;
 import com.zzu.ehome.ehomefordoctor.view.CommonDialog;
 import com.zzu.ehome.ehomefordoctor.view.DialogEnsureCancelView;
 import com.zzu.ehome.ehomefordoctor.view.DialogTips;
+import com.zzu.ehome.ehomefordoctor.view.HeadView;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,9 +61,11 @@ import io.rong.imkit.RongIM;
 import io.rong.imkit.fragment.ConversationListFragment;
 import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
+import io.rong.imlib.model.Message;
 import io.rong.imlib.model.UserInfo;
+import io.rong.push.notification.PushNotificationMessage;
 
-public class MainActivity extends BaseActivity implements IOnLineView,IOffLineView,IUpView {
+public class MainActivity extends BaseActivity implements IOnLineView, IOffLineView, IUpView {
     private static final int REQUEST_PERMISSION = 0;
 
     @BindView(R.id.image_msg)
@@ -67,10 +82,10 @@ public class MainActivity extends BaseActivity implements IOnLineView,IOffLineVi
     RelativeLayout layoutHz;
     @BindView(R.id.icon_state)
     ImageView iconState;
-    private int index=1 ;
+    private int index = 1;
     private int selectColor;
     private int unSelectColor;
-    private int currentTabIndex=1;
+    private int currentTabIndex = 1;
     private Fragment[] fragments;
     private RelativeLayout[] mTabs;
     private Fragment mConversationListFragment = null;
@@ -81,19 +96,22 @@ public class MainActivity extends BaseActivity implements IOnLineView,IOffLineVi
     private TextView tv_dot;
     private HzOfflinePresenter mHzOfflinePresenter;
     private UpDataPresenter mUpDataPresenter;
+    private UserDataPresenter presenter;
+    private boolean isfirst=false;
     public RongIM.OnReceiveUnreadCountChangedListener mCountListener = new RongIM.OnReceiveUnreadCountChangedListener() {
         @Override
         public void onMessageIncreased(int count) {
             App.getInstance().count = count;
-            if(count>0) {
+            if (count > 0) {
                 tv_dot.setText(App.getInstance().count + "");
                 tv_dot.setVisibility(View.VISIBLE);
-                hzFragment.refush();
-            }else{
+
+            } else {
                 tv_dot.setVisibility(View.GONE);
             }
         }
     };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,6 +126,8 @@ public class MainActivity extends BaseActivity implements IOnLineView,IOffLineVi
     public void init() {
         initGeTui();
         setOnlyTileViewMethod("消息");
+        App.finishSingleActivityByClass(LoginActivity.class);
+        App.finishSingleActivityByClass(FindPsdActivity.class);
 //        setDefaultTXViewMethod(R.mipmap.icon_arrow_left, "消息", "退出", new HeadView.OnLeftClickListener() {
 //            @Override
 //            public void onClick() {
@@ -137,43 +157,63 @@ public class MainActivity extends BaseActivity implements IOnLineView,IOffLineVi
                 .commit();
         iconState.setImageResource(R.mipmap.icon_rest);
         mHzOnlinePresenter = new HzOnlinePresenter(this);
-        mHzOfflinePresenter=new HzOfflinePresenter(this);
-        mUpDataPresenter=new UpDataPresenter(this);
+        mHzOfflinePresenter = new HzOfflinePresenter(this);
+        mUpDataPresenter = new UpDataPresenter(this);
+
+
         mUpDataPresenter.getUp();
         setTitls(1);
         setTabs(1);
-        if(SharePreferenceUtil.getInstance(this).getRongState()==1){
+        if (SharePreferenceUtil.getInstance(this).getRongState() == 1) {
             mHzOnlinePresenter.postOnline();
+
             iconState.setImageResource(R.mipmap.icon_rest);
-            indexButton=1;
-        }else{
-            indexButton=0;
+            indexButton = 1;
+        } else {
+            indexButton = 0;
             iconState.setImageResource(R.mipmap.icon_online);
             mHzOfflinePresenter.postOffline();
         }
-        tv_dot=(TextView)findViewById(R.id.tv_dot);
+        tv_dot = (TextView) findViewById(R.id.tv_dot);
 
         RongIM.getInstance().setCurrentUserInfo(new UserInfo(SharePreferenceUtil.getInstance(MainActivity.this).getUserId(),
                 SharePreferenceUtil.getInstance(MainActivity.this).getNICK(), Uri.parse(SharePreferenceUtil.getInstance(MainActivity.this).getRongHead())));
         RongIM.getInstance().setMessageAttachedUserInfo(true);
         initUnreadCountListener();
+
     }
 
     @OnClick({R.id.layout_msg, R.id.layout_hz, R.id.icon_state})
     public void onClick(View view) {
+
         switch (view.getId()) {
             case R.id.layout_msg:
+//                mConversationListFragment=ConversationListFragment.getInstance();
+//                FragmentTransaction trx = getSupportFragmentManager()
+//                        .beginTransaction();
+//                trx.replace(R.id.fragment_container,mConversationListFragment).;
+
                 index = 0;
                 setTitls(index);
                 setTabs(index);
+                selectItem(index);
+                hzFragment.setClick(false);
+
                 break;
             case R.id.layout_hz:
                 index = 1;
+                hzFragment=(HZFragment)HZFragment.getInstance();
+                FragmentTransaction trx2 = getSupportFragmentManager()
+                        .beginTransaction();
+                trx2.replace(R.id.fragment_container,hzFragment).commit();
                 setTitls(index);
                 setTabs(index);
+                selectItem(index);
+                hzFragment.setClick(true);
+
                 break;
             case R.id.icon_state:
-
+                isfirst=true;
                 if (indexButton % 2 == 0) {
                     SharePreferenceUtil.getInstance(MainActivity.this).setRongState(1);
                     initRong();
@@ -190,9 +230,8 @@ public class MainActivity extends BaseActivity implements IOnLineView,IOffLineVi
 
                 break;
         }
-        selectItem(index);
+//        selectItem(index);
     }
-
 
 
     private void selectItem(int index) {
@@ -221,6 +260,7 @@ public class MainActivity extends BaseActivity implements IOnLineView,IOffLineVi
                 break;
         }
     }
+
     public void setTabs(int index) {
         resetImgs();
         switch (index) {
@@ -243,7 +283,7 @@ public class MainActivity extends BaseActivity implements IOnLineView,IOffLineVi
     }
 
     private void requestPermission() {
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE,Manifest.permission.ACCESS_FINE_LOCATION},
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE, Manifest.permission.ACCESS_FINE_LOCATION},
                 REQUEST_PERMISSION);
     }
 
@@ -253,9 +293,6 @@ public class MainActivity extends BaseActivity implements IOnLineView,IOffLineVi
             if ((grantResults.length == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED)) {
                 PushManager.getInstance().initialize(this.getApplicationContext());
             } else {
-                Log.e("GetuiSdkDemo",
-                        "we highly recommend that you need to grant the special permissions before initializing the SDK, otherwise some "
-                                + "functions will not work");
                 PushManager.getInstance().initialize(this.getApplicationContext());
             }
         } else {
@@ -265,8 +302,8 @@ public class MainActivity extends BaseActivity implements IOnLineView,IOffLineVi
 
     @Override
     public <T> void onUpSuccess(T t) {
-        UpInfoBean mUpInfoBean=(UpInfoBean)t;
-        if(mUpInfoBean.getmResultBean()!=null){
+        UpInfoBean mUpInfoBean = (UpInfoBean) t;
+        if (mUpInfoBean.getmResultBean() != null) {
             return;
         }
 
@@ -297,6 +334,8 @@ public class MainActivity extends BaseActivity implements IOnLineView,IOffLineVi
     }
 
 
+
+
     private class MyConnectionStatusListener implements RongIMClient.ConnectionStatusListener {
 
         @Override
@@ -316,13 +355,8 @@ public class MainActivity extends BaseActivity implements IOnLineView,IOffLineVi
 
                     break;
                 case KICKED_OFFLINE_BY_OTHER_CLIENT://用户账户在其他设备登录，本机会被踢掉线
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            CommonDialog.confirmExit(MainActivity.this);
-                        }
-                    });
 
+                    RxBus.getInstance().send(new EventType("rongyun"));
                     break;
             }
         }
@@ -380,7 +414,8 @@ public class MainActivity extends BaseActivity implements IOnLineView,IOffLineVi
         dialog.show();
         dialog = null;
     }
-    private void initRong(){
+
+    private void initRong() {
         String token = SharePreferenceUtil.getInstance(this).getRongToken();
 
         if (!TextUtils.isEmpty(token)) {
@@ -390,14 +425,18 @@ public class MainActivity extends BaseActivity implements IOnLineView,IOffLineVi
                     RongIM.getInstance().getRongIMClient().setConnectionStatusListener(new MyConnectionStatusListener());
                     RongIM.getInstance().setCurrentUserInfo(new UserInfo(SharePreferenceUtil.getInstance(MainActivity.this).getUserId(),
                             SharePreferenceUtil.getInstance(MainActivity.this).getNICK(), Uri.parse(SharePreferenceUtil.getInstance(MainActivity.this).getRongHead())));
-                   RongIM.getInstance().setMessageAttachedUserInfo(true);
+                    RongIM.getInstance().setMessageAttachedUserInfo(true);
+                    refreshList();
                 }
             });
         }
     }
+
     @Override
     public void onOffLineSuccess(String str) {
-
+        if(isfirst) {
+            ToastUtils.showMessage(MainActivity.this, "离线时间已记录成功！");
+        }
     }
 
     @Override
@@ -407,13 +446,16 @@ public class MainActivity extends BaseActivity implements IOnLineView,IOffLineVi
 
     @Override
     public void onLineSuccess(String str) {
-
+        if(isfirst) {
+            ToastUtils.showMessage(MainActivity.this, "上线时间已记录成功！");
+        }
     }
 
     @Override
     public void onLineErroe(Exception e) {
 
     }
+
     private void showForceUpdate(String content) {
         LayoutInflater inflater = LayoutInflater.from(this);
         View layout = inflater.inflate(R.layout.dialog_default_ensure, null);
@@ -431,11 +473,12 @@ public class MainActivity extends BaseActivity implements IOnLineView,IOffLineVi
             public void onClick(View v) {
                 final Intent it = new Intent(MainActivity.this,
                         DownloadServiceForAPK.class);
-             startService(it);
+                startService(it);
 
             }
         });
     }
+
     private void showUpdateDialog(String content) {
         DialogEnsureCancelView dialogEnsureCancelView = new DialogEnsureCancelView(
                 this).setDialogMsg("检测到新版本", content, "下载")
@@ -457,10 +500,11 @@ public class MainActivity extends BaseActivity implements IOnLineView,IOffLineVi
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(SharePreferenceUtil.getInstance(this).getRongState()==1){
+        if (SharePreferenceUtil.getInstance(this).getRongState() == 1) {
             mHzOfflinePresenter.postOffline();
         }
     }
+
     private void initUnreadCountListener() {
         final Conversation.ConversationType[] conversationTypes = {Conversation.ConversationType.PRIVATE, Conversation.ConversationType.DISCUSSION,
                 Conversation.ConversationType.GROUP, Conversation.ConversationType.SYSTEM,
@@ -473,5 +517,42 @@ public class MainActivity extends BaseActivity implements IOnLineView,IOffLineVi
                 RongIM.getInstance().setOnReceiveUnreadCountChangedListener(mCountListener, conversationTypes);
             }
         }, 500);
+    }
+    private void refreshList(){
+        RongIM.setOnReceiveMessageListener(new RongIMClient.OnReceiveMessageListener() {
+            @Override
+            public boolean onReceived(Message message, int i) {
+                String sendid=message.getSenderUserId();
+                if(hzFragment.getmList().size()>0){
+                    boolean isHasNew=true;
+                    for(UsersBySignDoctor bean:hzFragment.getmList()){
+                        if(sendid.equals(bean.getUser_RegisterId())){
+                            isHasNew=false;
+                            break;
+                        }
+                    }
+                    if(isHasNew){
+                        CommonApi.getUser(sendid, new CommonApi.UserInfoListener() {
+                            @Override
+                            public void OnSuccess(String msg) {
+                                UserInfoDate date = JsonTools.getData(msg.toString(), UserInfoDate.class);
+                                List<User> list = date.getData();
+                                User user = list.get(0);
+                                String url=user.getImgHead();
+                                if(url.contains("vine.gif")){
+                                    url="";
+                                }else{
+                                    url=Constans.JE_BASE_URL3 + url.replace("~", "").replace("\\", "/");
+
+                                }
+                                RongIM.getInstance().refreshUserInfoCache(new UserInfo(user.getUserid(), user.getUsername(), Uri.parse(url)));
+                            }
+                        });
+//                       hzFragment.refush();
+                    }
+                }
+                return false;
+            }
+        });
     }
 }

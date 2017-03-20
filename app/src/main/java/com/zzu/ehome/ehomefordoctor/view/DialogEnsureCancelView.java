@@ -67,6 +67,7 @@ public class DialogEnsureCancelView extends MyDialogView {
         }
 
         this.addView(layout, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+
     }
 
     @Override

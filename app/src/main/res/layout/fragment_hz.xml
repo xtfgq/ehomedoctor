@@ -5,6 +5,8 @@
     android:background="@color/base_color_text_white"
     android:orientation="vertical">
 
+
+
     <com.zzu.ehome.ehomefordoctor.view.ProgressStateLayout
         android:id="@+id/progressStateLayout"
         android:layout_width="match_parent"

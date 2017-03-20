@@ -5,5 +5,5 @@ package com.zzu.ehome.ehomefordoctor.mvp.listener;
  */
 
 public interface IStaticData {
-    void getStaticData(String userid,OnCommonResultListener listener);
+    void getStaticData(String userid,String CardNo,OnCommonResultListener listener);
 }

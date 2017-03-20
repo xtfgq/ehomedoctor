@@ -13,59 +13,61 @@
         android:background="@color/base_color_text_white"
         android:orientation="horizontal">
 
-        <LinearLayout
+        <!-- <LinearLayout
+               android:layout_width="0dp"
+               android:layout_height="match_parent"
+               android:layout_weight="1"
+               android:orientation="vertical">-->
+
+        <!-- <RelativeLayout
+             android:layout_width="match_parent"
+             android:layout_height="0dp"
+             android:layout_marginTop="8dp"
+             android:layout_weight="1"
+
+             >
+
+             <TextView
+                 android:id="@+id/tv_title"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_alignParentLeft="true"
+                 android:layout_centerVertical="true"
+                 android:text="123464"
+                 android:textColor="@color/text_color2"
+                 android:textSize="16sp" />
+             <ImageView
+                 android:id="@+id/ivocr"
+                 android:layout_toRightOf="@+id/tv_title"
+                 android:layout_width="15dp"
+                 android:layout_height="15dp"
+                 android:layout_centerVertical="true"
+                 android:layout_marginLeft="8dp"
+                 android:visibility="gone"
+                 android:src="@mipmap/icon_ocr2"/>
+
+         </RelativeLayout>
+         >&ndash;&gt;
+-->
+        <!--    <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+               >
+-->
+        <TextView
+            android:id="@+id/tv_time"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:text="2016/8/20"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:gravity="center_vertical"
+            android:textColor="#949395"
+            android:textSize="14sp" />
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginTop="8dp"
-                android:layout_weight="1"
-
-                >
-
-                <TextView
-                    android:id="@+id/tv_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:text="123464"
-                    android:textColor="@color/text_color2"
-                    android:textSize="16sp" />
-                <ImageView
-                    android:id="@+id/ivocr"
-                    android:layout_toRightOf="@+id/tv_title"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="8dp"
-                    android:src="@mipmap/icon_ocr2"/>
-
-            </RelativeLayout>
-            >
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginBottom="8dp"
-                android:layout_weight="1">
-
-                <TextView
-                    android:id="@+id/tv_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:text="2016/8/20"
-                    android:textColor="#949395"
-                    android:textSize="14sp" />
-
-            </RelativeLayout>
-        </LinearLayout>
+        <!--      </RelativeLayout>-->
+        <!--   </LinearLayout>-->
 
         <RelativeLayout
             android:layout_width="wrap_content"

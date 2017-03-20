@@ -8,6 +8,7 @@ public interface InspectionReportView {
     String getPageSize();
     String getIndex();
     String getUserNum();
+    String getType();
     <T>void onSuccess(T t);
     void onError();
 }

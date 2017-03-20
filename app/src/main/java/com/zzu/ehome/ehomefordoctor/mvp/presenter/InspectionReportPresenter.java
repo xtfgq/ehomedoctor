@@ -21,7 +21,7 @@ public class InspectionReportPresenter {
 
 
     public void getInspectionReport(){
-        mInspectionReportData.getInspectionReport(mInspectionReportView.getUserNum(), mInspectionReportView.getPageSize(), mInspectionReportView.getIndex(), new OnCommonResultListener() {
+        mInspectionReportData.getInspectionReport(mInspectionReportView.getUserNum(),mInspectionReportView.getType(), mInspectionReportView.getPageSize(), mInspectionReportView.getIndex(), new OnCommonResultListener() {
             @Override
             public <T> void onSuccess(T t) {
                 mInspectionReportView.onSuccess(t);

@@ -39,7 +39,7 @@ public class ECGStaticAadapter extends BaseListAdapter<StaticBean> {
 
         holder.tvtitle.setText("静态心电报告");
         final StaticBean item = getItem(position);
-        holder.time.setText(item.getCollectTime());
+        holder.time.setText(item.getReportTime());
         return convertView;
     }
 

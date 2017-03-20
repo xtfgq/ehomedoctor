@@ -14,7 +14,32 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:orientation="vertical">
+        <RelativeLayout
+            android:id="@+id/layout_protocol"
+            android:layout_width="match_parent"
+            android:layout_height="52dp">
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/base_color_text_black"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:text="签约协议"
+                />
+            <ImageView
 
+                android:layout_width="10dp"
+                android:layout_height="22dp"
+                android:src="@mipmap/icon_arrow_r"
+                android:layout_marginRight="4dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/color_line_text" />
         <RelativeLayout
             android:id="@+id/layout_base_file"
             android:layout_width="match_parent"
@@ -26,34 +51,7 @@
                 android:textColor="@color/base_color_text_black"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:text="基础档案"
-                />
-            <ImageView
-
-                android:layout_width="10dp"
-                android:layout_height="22dp"
-                android:src="@mipmap/icon_arrow_r"
-                android:layout_marginRight="4dp"
-                android:layout_centerVertical="true"
-                android:layout_alignParentRight="true" />
-        </RelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/color_line_text" />
-        <RelativeLayout
-            android:id="@+id/layout_health_data"
-            android:layout_width="match_parent"
-            android:layout_height="52dp">
-            <TextView
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:textSize="16sp"
-                android:textColor="@color/base_color_text_black"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:text="健康数据"
+                android:text="基础信息"
                 />
             <ImageView
 
@@ -90,6 +88,35 @@
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true" />
         </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/color_line_text" />
+        <RelativeLayout
+            android:id="@+id/layout_health_data"
+            android:layout_width="match_parent"
+            android:layout_height="52dp">
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@color/base_color_text_black"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:text="日常数据"
+                />
+            <ImageView
+
+                android:layout_width="10dp"
+                android:layout_height="22dp"
+                android:src="@mipmap/icon_arrow_r"
+                android:layout_marginRight="4dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>
+
+
+
 
         <View
             android:layout_width="match_parent"
@@ -106,7 +133,7 @@
                 android:textColor="@color/base_color_text_black"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:text="心电报告"
+                android:text="历史报告"
                 />
             <ImageView
                 android:layout_width="10dp"
@@ -121,31 +148,8 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/color_line_text" />
-        <RelativeLayout
-            android:id="@+id/layout_jcbg"
-            android:layout_width="match_parent"
-            android:layout_height="52dp">
-            <TextView
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:textSize="16sp"
-                android:textColor="@color/base_color_text_black"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:text="检查报告"
-                />
-            <ImageView
-                android:layout_width="10dp"
-                android:layout_height="22dp"
-                android:src="@mipmap/icon_arrow_r"
-                android:layout_marginRight="4dp"
-                android:layout_centerVertical="true"
-                android:layout_alignParentRight="true" />
-        </RelativeLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/color_line_text" />
+
+
 
     </LinearLayout>
 </LinearLayout>

@@ -51,13 +51,12 @@ import static com.zzu.ehome.ehomefordoctor.activity.MedicalRecordActivity.UserNo
 public class NewSuggarActvity extends BaseActivity  implements ISuggarDateView,ISuggarHistoryView,StickyListHeadersListView.OnHeaderClickListener, StickyListHeadersListView.OnLoadingMoreLinstener{
     @BindView(R.id.lv_temp)
     StickyListHeadersListView listView;
-    @BindView(R.id.radioGroup)
     RadioGroup group;
-    @BindView(R.id.rb_day)
+
     RadioButton rbday;
-    @BindView(R.id.rb_week)
+
     RadioButton rbweek;
-    @BindView(R.id.rb_month)
+
     RadioButton rbmonth;
     private LayoutInflater inflater;
 
@@ -108,6 +107,10 @@ public class NewSuggarActvity extends BaseActivity  implements ISuggarDateView,I
         week=CommonUtils.getDays(sdf.format(CommonUtils.changeDate(-6).getTime()), sdf.format(CommonUtils.changeDate(-1).getTime() + 60 * 60 * 24 * 1000));
         month=CommonUtils.getDays(sdf.format(CommonUtils.changeDate(-29).getTime()), sdf.format(CommonUtils.changeDate(-1).getTime() + 60 * 60 * 24 * 1000));
         heardchat = (LinearLayout) inflater.inflate(R.layout.new_suggar, null);
+        group=(RadioGroup)heardchat.findViewById(R.id.radioGroup);
+        rbday=(RadioButton)heardchat.findViewById(R.id.rb_day);
+        rbweek=(RadioButton)heardchat.findViewById(R.id.rb_week);
+        rbmonth=(RadioButton)heardchat.findViewById(R.id.rb_month);
         mChart = (SuggarView) heardchat.findViewById(R.id.chart);
         mAadpter = new BloodSuggarChatAdapter(NewSuggarActvity.this);
         tvnodata = (TextView) heardchat.findViewById(R.id.tvnodate);
@@ -124,43 +127,48 @@ public class NewSuggarActvity extends BaseActivity  implements ISuggarDateView,I
         presenter.getSuggarData();
         historyPresenter=new SuggarHistoryPresenter(this);
         historyPresenter.getSuggarHistoryData();
-
+        initEvents();
     }
-    @OnClick({R.id.rb_day, R.id.rb_week,R.id.rb_month})
 
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.rb_day:
-                rbday.setChecked(true);
-                rbday.setTextColor(getResources().getColor(R.color.base_color_text_white));
-                rbweek.setChecked(false);
-                rbweek.setTextColor(getResources().getColor(R.color.actionbar_color));
-                rbmonth.setChecked(false);
-                rbmonth.setTextColor(getResources().getColor(R.color.actionbar_color));
-                mDataTimeType=DataTimeType.DAY;
-                presenter.getSuggarData();
-                break;
-            case R.id.rb_week:
-                rbday.setChecked(false);
-                rbday.setTextColor(getResources().getColor(R.color.actionbar_color));
-                rbweek.setChecked(true);
-                rbweek.setTextColor(getResources().getColor(R.color.base_color_text_white));
-                rbmonth.setChecked(false);
-                rbmonth.setTextColor(getResources().getColor(R.color.actionbar_color));
-                mDataTimeType=DataTimeType.WEEK;
-                presenter.getSuggarData();
-                break;
-            case R.id.rb_month:
-                rbday.setChecked(false);
-                rbday.setTextColor(getResources().getColor(R.color.actionbar_color));
-                rbweek.setChecked(false);
-                rbweek.setTextColor(getResources().getColor(R.color.actionbar_color));
-                rbmonth.setChecked(true);
-                rbmonth.setTextColor(getResources().getColor(R.color.base_color_text_white));
-                mDataTimeType=DataTimeType.MONTH;
-                presenter.getSuggarData();
-                break;
-        }
+    public void initEvents(){
+        group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener(){
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.rb_day:
+                        rbday.setChecked(true);
+                        rbday.setTextColor(getResources().getColor(R.color.base_color_text_white));
+                        rbweek.setChecked(false);
+                        rbweek.setTextColor(getResources().getColor(R.color.actionbar_color));
+                        rbmonth.setChecked(false);
+                        rbmonth.setTextColor(getResources().getColor(R.color.actionbar_color));
+                        mDataTimeType=DataTimeType.DAY;
+                        presenter.getSuggarData();
+                        break;
+                    case R.id.rb_week:
+                        rbday.setChecked(false);
+                        rbday.setTextColor(getResources().getColor(R.color.actionbar_color));
+                        rbweek.setChecked(true);
+                        rbweek.setTextColor(getResources().getColor(R.color.base_color_text_white));
+                        rbmonth.setChecked(false);
+                        rbmonth.setTextColor(getResources().getColor(R.color.actionbar_color));
+                        mDataTimeType=DataTimeType.WEEK;
+                        presenter.getSuggarData();
+                        break;
+                    case R.id.rb_month:
+                        rbday.setChecked(false);
+                        rbday.setTextColor(getResources().getColor(R.color.actionbar_color));
+                        rbweek.setChecked(false);
+                        rbweek.setTextColor(getResources().getColor(R.color.actionbar_color));
+                        rbmonth.setChecked(true);
+                        rbmonth.setTextColor(getResources().getColor(R.color.base_color_text_white));
+                        mDataTimeType=DataTimeType.MONTH;
+                        presenter.getSuggarData();
+                        break;
+                }
+            }
+        });
+
     }
 
     @Override
@@ -323,17 +331,27 @@ public class NewSuggarActvity extends BaseActivity  implements ISuggarDateView,I
     private void setMonthChat(SuggarView mChart,List<BloodSuggarBean> list,List<PointD> linePoint1,List<PointD> linePoint2,List<PointD> linePoint3){
 
         for (BloodSuggarBean th : list) {
+            Double xd ;
             if (Integer.valueOf(th.getMonitorPoint())==1) {
-                Double xd = CommonUtils.position(th.getMonitorTime().split("\\ ")[0], month);
+
+
+
+                    xd = CommonUtils.position(th.getMonitorTime().split("\\ ")[0], month)+1;
+
+
                 Double ydH= Double.valueOf(th.getBloodSugarValue());
                 linePoint1.add(new PointD(xd, ydH));
             } else if(Integer.valueOf(th.getMonitorPoint())==0){
-                Double xd = CommonUtils.position(th.getMonitorTime().split("\\ ")[0], month);
+
+                    xd = CommonUtils.position(th.getMonitorTime().split("\\ ")[0], month)+1;
+
                 Double ydl= Double.valueOf(th.getBloodSugarValue());
                 linePoint2.add(new PointD(xd, ydl));
             }
             else {
-                Double xd = CommonUtils.position(th.getMonitorTime().split("\\ ")[0], month);
+
+                    xd = CommonUtils.position(th.getMonitorTime().split("\\ ")[0], month)+1;
+
                 Double ydl = Double.valueOf(th.getBloodSugarValue());
                 linePoint3.add(new PointD(xd, ydl));
             }

@@ -31,7 +31,7 @@ public class DynamicPresenter {
 
             @Override
             public void onError(Exception e) {
-                mIDynamicView.onError();
+                mIDynamicView.onError(e+"");
             }
             @Override
             public void onFinish() {

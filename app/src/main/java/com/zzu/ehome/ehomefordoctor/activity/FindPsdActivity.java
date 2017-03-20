@@ -189,8 +189,8 @@ public class FindPsdActivity extends BaseActivity implements ICheckInfoView,IGet
                         .getString("MessageContent");
                 startService(mIntent);
 
-                ToastUtils.showMessage(FindPsdActivity.this, array.getJSONObject(0)
-                        .getString("MessageContent"));
+//                ToastUtils.showMessage(FindPsdActivity.this, array.getJSONObject(0)
+//                        .getString("MessageContent"));
             }else {
                 ToastUtils.showMessage(FindPsdActivity.this, array.getJSONObject(0)
                         .getString("MessageContent"));

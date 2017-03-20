@@ -122,9 +122,9 @@ public class DynamicFragment extends BaseFragment implements IDynamicView {
 
 
     @Override
-    public void onError() {
+    public void onError(String error) {
         swipeRefreshLayout.setRefreshing(false);
-        progressStateLayout.showEmpty(R.mipmap.icon_none,"数据加载失败");
+        progressStateLayout.showEmpty(R.mipmap.icon_none,"数据加载失败"+error);
     }
 
 

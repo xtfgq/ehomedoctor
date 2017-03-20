@@ -18,6 +18,8 @@ import java.util.Map;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
+import static com.igexin.push.core.a.p;
+
 /**
  * Created by Mersens on 2016/10/29.
  */
@@ -30,11 +32,14 @@ public class InspectionReportDataImpl implements InspectionReportData {
     }
 
     @Override
-    public void getInspectionReport(String userno, String pagesize, String page, final OnCommonResultListener listener) {
+    public void getInspectionReport(String userno, String type,String pagesize, String page, final OnCommonResultListener listener) {
         Map<String,String> map=new HashMap<>();
         map.put("CardNO",userno);
         map.put("PageIndex",page);
         map.put("PageSize",pagesize);
+        map.put("OCRType",type);
+
+        map.put("FromTo","04");
         String result= Node.getResult("OCRRecordInquiry",map);
         final ServiceStore service= manager.create(ServiceStore.class);
         Call<ResponseBody> call=service.getInspectionReport(result);

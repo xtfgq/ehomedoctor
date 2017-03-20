@@ -36,6 +36,8 @@ import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
+import static com.zzu.ehome.ehomefordoctor.utils.NetUtils.isNetworkConnected;
+
 /**
  * Created by Mersens on 2016/9/12.
  */
@@ -50,20 +52,11 @@ public class RequestManager {
     private RequestManager() {
         Strategy strategy = new AnnotationStrategy();
         Serializer serializer = new Persister(strategy);
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        File httpCacheDirectory = new File(App.getInstance().getCacheDir(), "retrofit");
-        int cacheSize = 32 * 1024 * 1024;
-        Cache cache = new Cache(httpCacheDirectory, cacheSize);
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.readTimeout(READ_TIMEOUT, TimeUnit.SECONDS);
         builder.writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS);
         builder.connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS);
         builder.retryOnConnectionFailure(true);
-        builder.addInterceptor(interceptor);
-        builder.addNetworkInterceptor(getNetWorkInterceptor());
-        builder.addInterceptor(getInterceptor());
-        builder.cache(cache);
         mClient = builder.build();
         mRetrofit = new Retrofit.Builder()
                 .baseUrl(Constans.WEBSERVICE_URL)
@@ -85,8 +78,6 @@ public class RequestManager {
         }
         return manager;
     }
-
-
     public void execute(Call<ResponseBody> call, final RequestCallBack callBack) {
         callBack.onStart();
         call.enqueue(new Callback<ResponseBody>() {
@@ -139,9 +130,6 @@ public class RequestManager {
                 });
     }
 
-
-
-
     public Interceptor getInterceptor() {
         return new Interceptor() {
             @Override
@@ -157,49 +145,9 @@ public class RequestManager {
             }
         };
     }
-
-    public Interceptor getNetWorkInterceptor() {
-        return new Interceptor() {
-            @Override
-            public Response intercept(Chain chain) throws IOException {
-                Request request = chain.request();
-                Response response = chain.proceed(request);
-                if (isNetworkConnected(App.getInstance())) {
-                    int maxAge = 1 * 60;
-                    // 有网络时 设置缓存超时时间1个小时
-                    response.newBuilder()
-                            .header("Cache-Control", "public, max-age=" + maxAge)
-                            .removeHeader("Pragma")
-                            .build();
-                } else {
-                    // 无网络时，设置超时为1周
-                    int maxStale = 60 * 60 * 24 * 7;
-                    response.newBuilder()
-                            .header("Cache-Control", "public, only-if-cached, max-stale=" + maxStale)
-                            .removeHeader("Pragma")
-                            .build();
-                }
-                return response;
-            }
-        };
-    }
-
-    public static boolean isNetworkConnected(Context context) {
-        if (context != null) {
-            ConnectivityManager mConnectivityManager = (ConnectivityManager) context
-                    .getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
-            if (mNetworkInfo != null) {
-                return mNetworkInfo.isAvailable();
-            }
-        }
-        return false;
-    }
-
     public <T> T create(Class<T> cls) {
         return mRetrofit.create(cls);
     }
-
 
     public interface RequestCallBack {
         void onSueecss(String msg);

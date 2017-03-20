@@ -3,7 +3,10 @@ package com.zzu.ehome.ehomefordoctor.activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.zzu.ehome.ehomefordoctor.R;
@@ -63,6 +66,8 @@ public class BaseFileActivity extends BaseActivity implements BaseDataView {
     private ViewGroup.MarginLayoutParams lp;
     private String mTargetId;
     private BaseDataPresenter presenter;
+    private RelativeLayout rl_guan;
+    private ScrollView scrollView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,6 +86,8 @@ public class BaseFileActivity extends BaseActivity implements BaseDataView {
                 finish();
             }
         });
+        rl_guan=(RelativeLayout)findViewById(R.id.rl_guan);
+        scrollView=(ScrollView)findViewById(R.id.scrollView);
         lp = new ViewGroup.MarginLayoutParams(new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         lp.bottomMargin = 8;
@@ -98,6 +105,7 @@ public class BaseFileActivity extends BaseActivity implements BaseDataView {
             JSONObject mySO = new JSONObject((String)t);
             JSONArray json = mySO.getJSONArray("BaseDataInquiry");
             if (!json.getJSONObject(0).has("MessageCode")) {
+                 scrollView.setVisibility(View.VISIBLE);
                 JSONObject jsonobject = json.getJSONObject(0);
                 maritalStatusNames = jsonobject.getString("Marriage");
                 smokeStateNames = jsonobject.getString("Smoking");
@@ -107,8 +115,31 @@ public class BaseFileActivity extends BaseActivity implements BaseDataView {
                 geneticHistoryNmaes = jsonobject.getString("GeneticHistory");
                 familyNames = jsonobject.getString("FamilyHistory");
                 bloodtype= jsonobject.getString("BloodType");
+                if(familyNames.contains("&lt;")||familyNames.contains("&gt;")||familyNames.contains("&amp;")){
+                    familyNames.replaceAll("&lt;","<");
+                    familyNames.replaceAll("&gt;",">");
+                    familyNames.replaceAll("&amp;","&");
+                }
+                if(geneticHistoryNmaes.contains("&lt;")||geneticHistoryNmaes.contains("&gt;")||geneticHistoryNmaes.contains("&amp;")){
+                    geneticHistoryNmaes.replaceAll("&lt;","<");
+                    geneticHistoryNmaes.replaceAll("&gt;",">");
+                    geneticHistoryNmaes.replaceAll("&amp;","&");
+                }
+                if(medicineAllergyNames.contains("&lt;")||medicineAllergyNames.contains("&gt;")||medicineAllergyNames.contains("&amp;")){
+                    medicineAllergyNames.replaceAll("&lt;","<");
+                    medicineAllergyNames.replaceAll("&gt;",">");
+                    medicineAllergyNames.replaceAll("&amp;","&");
+                }
+                if(pastMedicalHistoryNames.contains("&lt;")||pastMedicalHistoryNames.contains("&gt;")||pastMedicalHistoryNames.contains("&amp;")){
+                    pastMedicalHistoryNames.replaceAll("&lt;","<");
+                    pastMedicalHistoryNames.replaceAll("&gt;",">");
+                    pastMedicalHistoryNames.replaceAll("&amp;","&");
+                }
                 clearFlowData();
                 setDatas();
+            }else{
+                scrollView.setVisibility(View.GONE);
+                rl_guan.setVisibility(View.VISIBLE);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -130,7 +161,7 @@ public class BaseFileActivity extends BaseActivity implements BaseDataView {
         }
 
         if (!TextUtils.isEmpty(medicineAllergyNames)) {
-            String names[] = medicineAllergyNames.split(",");
+            String names[] = medicineAllergyNames.split(" ");
 
             for (int i = 0; i < names.length; i++) {
                 if (!TextUtils.isEmpty(names[i]) && !" ".equals(names[i])) {
@@ -142,7 +173,7 @@ public class BaseFileActivity extends BaseActivity implements BaseDataView {
             flowMedicineAllergy.addView(getTextView("无"), lp);
         }
         if (!TextUtils.isEmpty(pastMedicalHistoryNames)) {
-            String names[] = pastMedicalHistoryNames.split(",");
+            String names[] = pastMedicalHistoryNames.split(" ");
             for (int i = 0; i < names.length; i++) {
                 if (!TextUtils.isEmpty(names[i]) && !" ".equals(names[i])) {
                     flowPastMedicalHistory.addView(getTextView(names[i]), lp);
@@ -215,7 +246,7 @@ public class BaseFileActivity extends BaseActivity implements BaseDataView {
         }
 
         if (!TextUtils.isEmpty(geneticHistoryNmaes)) {
-            String names[] = geneticHistoryNmaes.split(",");
+            String names[] = geneticHistoryNmaes.split(" ");
             for (int i = 0; i < names.length; i++) {
                 if (!TextUtils.isEmpty(names[i]) && !" ".equals(names[i])) {
                     flowGeneticHistory.addView(getTextView(names[i]), lp);

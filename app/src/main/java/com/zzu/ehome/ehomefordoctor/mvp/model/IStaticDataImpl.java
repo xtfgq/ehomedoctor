@@ -9,6 +9,7 @@ import com.zzu.ehome.ehomefordoctor.mvp.listener.OnCommonResultListener;
 import com.zzu.ehome.ehomefordoctor.service.ServiceStore;
 import com.zzu.ehome.ehomefordoctor.utils.ECGNode;
 import com.zzu.ehome.ehomefordoctor.utils.JsonTools;
+import com.zzu.ehome.ehomefordoctor.utils.Node;
 import com.zzu.ehome.ehomefordoctor.utils.RequestManager;
 
 import org.json.JSONArray;
@@ -32,12 +33,11 @@ public class IStaticDataImpl implements IStaticData {
         manager=RequestManager.getInstance();
     }
     @Override
-    public void getStaticData(String userid, final OnCommonResultListener listener) {
+    public void getStaticData(String userid, String cardNo,final OnCommonResultListener listener) {
         Map<String,String> map=new HashMap<>();
         map.put("UserID",userid);
-        map.put("StartDate","");
-        map.put("EndDate","");
-        String result= ECGNode.getResult("BJResultInquiry",map);
+        map.put("CardNO",cardNo);
+        String result= Node.getResult("GetElectrocardio",map);
         final ServiceStore service= manager.create(ServiceStore.class);
         Call<ResponseBody> call=service.getStaticData(result);
         manager.execute(call, new RequestManager.RequestCallBack() {
@@ -46,17 +46,15 @@ public class IStaticDataImpl implements IStaticData {
                 Log.e("tag",msg);
                 try {
                     JSONObject mySO = new JSONObject(msg);
-                    JSONArray array = mySO.getJSONArray("Result");
-                    JSONArray arrayContent = array.getJSONObject(0).getJSONArray("MessageContent");
-                    int length = arrayContent.length();
+                    JSONArray array = mySO.getJSONArray("GetElectrocardio");
 
-                    if(length!=0){
-                        JSONObject s = array.getJSONObject(0);
-                        StaticDate date = JsonTools.getData(s.toString(), StaticDate.class);
+                    if(array.getJSONObject(0).has("MessageCode")){
+                        listener.onSuccess(null);
+
+                    }else{
+                        StaticDate date = JsonTools.getData(msg, StaticDate.class);
                         List<StaticBean> list = date.getData();
                         listener.onSuccess(list);
-                    }else{
-                        listener.onSuccess(null);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

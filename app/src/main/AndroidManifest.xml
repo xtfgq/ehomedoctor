@@ -44,7 +44,8 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <!-- 自定义权限 -->
     <uses-permission android:name="getui.permission.GetuiService.com.zzu.ehome.ehomefordoctor" />
-
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <permission
         android:name="getui.permission.GetuiService.com.zzu.ehome.ehomefordoctor"
         android:protectionLevel="normal"></permission>
@@ -87,6 +88,12 @@
         <activity android:name=".activity.InspectionReportActivity"/>
         <activity android:name=".activity.InspectionReportDetailActivity"/>
         <activity android:name=".activity.ECGPDFStaticActivity"/>
+        <activity android:name=".activity.HistoryReportListActivity"/>
+        <activity android:name=".activity.SmartWebView"/>
+        <activity android:name=".activity.MedicalExaminationDesActivity"/>
+        <activity android:name=".activity.ExaminationReportActivity"/>
+        <activity android:name=".activity.SignAgreementActivity"/>
+        <activity android:name=".activity.BiochemicalReportActivity"/>
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="5ZdTIkm4kvg2A0o9wAYTQBZyyVQYnMl7" />
@@ -265,11 +272,11 @@
             </intent-filter>
         </receiver>
         <!-- 正式服务-->
-     <meta-data
+<meta-data
             android:name="RONG_CLOUD_APP_KEY"
             android:value="x18ywvqf8xjpc" />
-   <!--     &lt;!&ndash;  测试服务&ndash;&gt;
-    <meta-data
+<!--     &lt;!&ndash;  测试服务&ndash;&gt;-->
+<!--<meta-data
               android:name="RONG_CLOUD_APP_KEY"
               android:value="e0x9wycfxehzq" />-->
         <service

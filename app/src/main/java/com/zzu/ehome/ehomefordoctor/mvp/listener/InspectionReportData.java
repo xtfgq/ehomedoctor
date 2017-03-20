@@ -5,5 +5,5 @@ package com.zzu.ehome.ehomefordoctor.mvp.listener;
  */
 
 public interface InspectionReportData {
-    void getInspectionReport(String userno,String pagesize,String page,OnCommonResultListener listener);
+    void getInspectionReport(String userno,String type,String pagesize,String page,OnCommonResultListener listener);
 }

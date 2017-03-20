@@ -30,13 +30,13 @@ public class ECGNode {
         sbf.append(ECGNode.toEnd("Request"));
         String str="<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n" +
                 "  <soap:Header>\n" +
-                "    <Identify xmlns=\""+ Constans.JE_BASE_URL3+"/TopmdWeixin/\">\n" +
+                "    <Identify xmlns=\""+ "http://www.topmd.cn"+"/TopmdWeixin/\">\n" +
                 "      <UserName>weixin</UserName>\n" +
                 "      <PassWord>myw#weixin1001</PassWord>\n" +
                 "    </Identify>\n" +
                 "  </soap:Header>\n" +
                 "  <soap:Body>\n" +
-                "    <"+namespace+" xmlns=\""+Constans.JE_BASE_URL3+"/TopmdWeixin/\">\n" +
+                "    <"+namespace+" xmlns=\""+"http://www.topmd.cn"+"/TopmdWeixin/\">\n" +
                 "      <str>"+sbf.toString()+"</str>\n" +
                 "    </"+namespace+">\n" +
                 "  </soap:Body>\n" +

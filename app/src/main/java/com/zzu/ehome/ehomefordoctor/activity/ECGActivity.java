@@ -36,6 +36,7 @@ public class ECGActivity extends BaseActivity {
     @BindView(R.id.fragment_container)
     FrameLayout fragmentContainer;
     private String mTargetId;
+    private String mUserNo;
     private int selectColor, unSelectColor;
 
     @Override
@@ -51,15 +52,16 @@ public class ECGActivity extends BaseActivity {
         unSelectColor = getResources().getColor(R.color.text_color1);
         selectColor = getResources().getColor(R.color.actionbar_color);
         mTargetId=getIntent().getStringExtra(MedicalRecordActivity.TARGETID);
+        mUserNo = getIntent().getStringExtra(MedicalRecordActivity.UserNo);
         setLeftWithTitleViewMethod(R.mipmap.icon_arrow_left, "心电报告", new HeadView.OnLeftClickListener() {
             @Override
             public void onClick() {
                 finish();
             }
         });
-        tvD.setTextColor(selectColor);
-        tvJ.setTextColor(unSelectColor);
-        addFragment(Type.DYNAMIC);
+        tvD.setTextColor(unSelectColor);
+        tvJ.setTextColor(selectColor);
+        addFragment(Type.STATIC_STATE);
     }
 
     @OnClick({R.id.layout_d, R.id.layout_j})
@@ -83,7 +85,7 @@ public class ECGActivity extends BaseActivity {
                 break;
 
             case STATIC_STATE:
-                fragment = StaticFragment.getInstance(mTargetId);
+                fragment = StaticFragment.getInstance(mTargetId,mUserNo);
                 break;
         }
 

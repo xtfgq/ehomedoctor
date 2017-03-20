@@ -142,7 +142,7 @@
                         android:gravity="top|left"
 
                         android:imeOptions="actionSend"
-                        android:inputType="text"
+                        android:lineSpacingMultiplier="1.0"
                         android:paddingLeft="4dp"
                         android:textColor="#939495"
                         android:textColorHint="#939495"
@@ -181,20 +181,19 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="top|left"
-
-
+                        android:layout_marginTop="7dp"
                         android:layout_marginLeft="8dp"
                         android:layout_marginRight="8dp"
-
                         android:background="@null"
                         android:gravity="top|left"
-                        android:text="迪克米松"
+                        android:text=""
                         android:imeOptions="actionSend"
-                        android:inputType="text"
+                        android:lineSpacingMultiplier="1.0"
                         android:minHeight="100dp"
                         android:paddingLeft="4dp"
-                        android:textColor="#0f2536"
-                        android:textSize="14sp" />
+                        android:textColor="#939495"
+
+                        android:textSize="@dimen/text_size_small" />
                 </LinearLayout>
 
                 <View

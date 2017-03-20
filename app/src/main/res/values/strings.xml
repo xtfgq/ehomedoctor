@@ -20,4 +20,19 @@
     <string name="tv_update_ok">确定</string>
     <string name="reg_code">短信验证码</string>
 
+    <string name="other_tips1">签约居民对签约服务团队提供的签约服务不满意时，有权向基层医疗机构提出终止服务协议；签约居民提出服务协议内容以外的要求或有侵犯全科医生团队成员人身安全等行为的，基层医疗机构有权终止服务协议，并保留诉讼权。</string>
+    <string name="other_tips2">签约居民和服务团队发生纠纷时，由基层医疗机构负责解释，对解释不满意的，双方可申请第三方给予调节，仍不能解决问题的，可向司法部门提出司法诉讼。</string>
+
+    <string name="refresh_succeed">刷新成功</string>
+    <string name="pull_to_refresh">下拉刷新</string>
+    <string name="release_to_refresh">释放立即刷新</string>
+    <string name="refreshing">正在刷新...</string>
+
+    <string name="refresh_fail">刷新失败</string>
+    <string name="more">更多</string>
+    <string name="loading">正在加载...</string>
+
+
+    <string name="pullup_to_load">上拉加载更多</string>
+    <string name="release_to_load">释放立即加载</string>
 </resources>

@@ -1,22 +1,27 @@
 package com.zzu.ehome.ehomefordoctor.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.zzu.ehome.ehomefordoctor.R;
+import com.zzu.ehome.ehomefordoctor.app.App;
 import com.zzu.ehome.ehomefordoctor.app.CommonApi;
 import com.zzu.ehome.ehomefordoctor.entity.DoctorBean;
 import com.zzu.ehome.ehomefordoctor.mvp.model.DataTimeType;
 import com.zzu.ehome.ehomefordoctor.mvp.presenter.LoginPresenter;
 import com.zzu.ehome.ehomefordoctor.mvp.view.ILoginView;
 import com.zzu.ehome.ehomefordoctor.utils.IOUtils;
+import com.zzu.ehome.ehomefordoctor.utils.SharePreferenceUtil;
 import com.zzu.ehome.ehomefordoctor.utils.ToastUtils;
+import com.zzu.ehome.ehomefordoctor.view.DialogTips;
 import com.zzu.ehome.ehomefordoctor.view.HeadView;
 
 import butterknife.BindView;
@@ -52,6 +57,7 @@ public class LoginActivity extends BaseActivity implements ILoginView {
         setLeftWithTitleViewMethod(R.mipmap.icon_arrow_left, "登录", new HeadView.OnLeftClickListener() {
             @Override
             public void onClick() {
+                App.getInstance().exit();
                 finish();
             }
         });
@@ -112,6 +118,7 @@ public class LoginActivity extends BaseActivity implements ILoginView {
                 public void OnSuccess(String msg) {
                     if (msg.contains("GetToken")) {
                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        App.getInstance().isOnline=true;
                         finish();
                     }
                 }
@@ -125,6 +132,36 @@ public class LoginActivity extends BaseActivity implements ILoginView {
 
     @Override
     public void onErroe(Exception e) {
+
+    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+                confirmExit();
+
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    public void confirmExit() {
+
+        DialogTips dialog = new DialogTips(LoginActivity.this, "", "是否退出软件？",
+                "确定", true, true);
+        dialog.SetOnSuccessListener(new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogInterface, int userId) {
+
+                App.getInstance().exit();
+                finish();
+            }
+        });
+
+        dialog.show();
+        dialog = null;
+
 
     }
 }

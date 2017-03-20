@@ -30,8 +30,9 @@ public class MedicalRecordActivity extends BaseActivity implements IUserDateView
     RelativeLayout layoutJzjl;
     @BindView(R.id.layout_xdbg)
     RelativeLayout layoutXdbg;
-    @BindView(R.id.layout_jcbg)
-    RelativeLayout layoutJcbg;
+    @BindView(R.id.layout_protocol)
+    RelativeLayout layoutProtocol;
+
     private String mTargetId, userNo;
     public static final String TARGETID = "TargetId";
     public static final String UserNo = "UserNo";
@@ -59,7 +60,7 @@ public class MedicalRecordActivity extends BaseActivity implements IUserDateView
         presenter.getUserData();
     }
 
-    @OnClick({R.id.layout_base_file, R.id.layout_health_data, R.id.layout_jzjl, R.id.layout_xdbg,R.id.layout_jcbg})
+    @OnClick({R.id.layout_protocol,R.id.layout_base_file, R.id.layout_health_data, R.id.layout_jzjl, R.id.layout_xdbg})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.layout_base_file:
@@ -72,11 +73,16 @@ public class MedicalRecordActivity extends BaseActivity implements IUserDateView
                 initAction(JzjlActivity.class);
                 break;
             case R.id.layout_xdbg:
-                initAction(ECGActivity.class);
+
+//                initAction(ECGActivity.class);
+                initAction(HistoryReportListActivity.class);
                 break;
-            case R.id.layout_jcbg:
+            case R.id.layout_protocol:
+                initAction(SignAgreementActivity.class);
+                break;
+         /*   case R.id.layout_jcbg:
                 initAction(InspectionReportActivity.class);
-                break;
+                break;*/
         }
     }
 
@@ -99,7 +105,5 @@ public class MedicalRecordActivity extends BaseActivity implements IUserDateView
         return mTargetId;
     }
 
-    @OnClick(R.id.layout_jcbg)
-    public void onClick() {
-    }
+
 }

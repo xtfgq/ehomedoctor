@@ -18,6 +18,7 @@ import com.zzu.ehome.ehomefordoctor.adapter.ECGStaticAadapter;
 import com.zzu.ehome.ehomefordoctor.entity.StaticBean;
 import com.zzu.ehome.ehomefordoctor.mvp.presenter.StaticDtatPresenter;
 import com.zzu.ehome.ehomefordoctor.mvp.view.IDynamicView;
+import com.zzu.ehome.ehomefordoctor.mvp.view.IStaticView;
 import com.zzu.ehome.ehomefordoctor.view.ProgressStateLayout;
 
 import java.util.List;
@@ -31,7 +32,7 @@ import static com.zzu.ehome.ehomefordoctor.db.DBHelper.mContext;
  * Created by Mersens on 2016/10/25.
  */
 
-public class StaticFragment extends BaseFragment implements IDynamicView {
+public class StaticFragment extends BaseFragment implements IStaticView {
     @BindView(R.id.listView)
     ListView listView;
     @BindView(R.id.swipeRefreshLayout)
@@ -39,8 +40,9 @@ public class StaticFragment extends BaseFragment implements IDynamicView {
     @BindView(R.id.progressStateLayout)
     ProgressStateLayout progressStateLayout;
     private View mView;
-    private String userid;
+    private String userid,cardno;
     public static final String USERID = "userid";
+    public static final String CARDNO = "cardno";
     private StaticDtatPresenter presenter;
     private List<StaticBean> list;
     private ECGStaticAadapter adapter;
@@ -63,6 +65,7 @@ public class StaticFragment extends BaseFragment implements IDynamicView {
     @Override
     public void init() {
         userid = getArguments().getString(USERID);
+        cardno=getArguments().getString(CARDNO);
         presenter=new StaticDtatPresenter(this);
         presenter.getStaticData();
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -76,19 +79,19 @@ public class StaticFragment extends BaseFragment implements IDynamicView {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final StaticBean item = adapter.getItem(position);
 
-                if(item.getImgPath().contains("pdf")){
+                if(item.getReportURL().contains("pdf")){
                     Intent i = new Intent(getActivity(), ECGPDFStaticActivity.class);
-                    i.putExtra("imurl", item.getImgPath());
-                    i.putExtra("Diagnosis", item.getDiagnosis());
-                    i.putExtra("PatientName", item.getPatientName());
-                    i.putExtra("CollectTime", item.getCollectTime());
+                    i.putExtra("imurl", item.getReportURL());
+                    i.putExtra("Diagnosis", item.getECGResult());
+                    i.putExtra("PatientName", item.getRealName());
+                    i.putExtra("CollectTime", item.getReportTime());
                     getActivity().startActivity(i);
                 }else{
                     Intent i = new Intent(getActivity(), StaticECGDetailActivity.class);
-                    i.putExtra("imurl", item.getImgPath());
-                    i.putExtra("Diagnosis", item.getDiagnosis());
-                    i.putExtra("PatientName", item.getPatientName());
-                    i.putExtra("CollectTime", item.getCollectTime());
+                    i.putExtra("imurl", item.getReportURL());
+                    i.putExtra("Diagnosis", item.getECGResult());
+                    i.putExtra("PatientName", item.getRealName());
+                    i.putExtra("CollectTime", item.getReportTime());
                     startActivity(i);
                 }
 
@@ -96,10 +99,11 @@ public class StaticFragment extends BaseFragment implements IDynamicView {
         });
     }
 
-    public static Fragment getInstance(String userid) {
+    public static Fragment getInstance(String userid,String cardno) {
         StaticFragment fragment = new StaticFragment();
         Bundle bundle = new Bundle();
         bundle.putString(USERID, userid);
+        bundle.putString(CARDNO, cardno);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -109,6 +113,11 @@ public class StaticFragment extends BaseFragment implements IDynamicView {
     public String getUserid() {
 //        userid = "92";
         return userid;
+    }
+
+    @Override
+    public String getCardNo() {
+        return cardno;
     }
 
     @Override
@@ -125,8 +134,8 @@ public class StaticFragment extends BaseFragment implements IDynamicView {
     }
 
     @Override
-    public void onError() {
+    public void onError(String error) {
         swipeRefreshLayout.setRefreshing(false);
-        progressStateLayout.showEmpty(R.mipmap.icon_none,"数据加载失败");
+        progressStateLayout.showEmpty(R.mipmap.icon_none,"数据加载失败"+error);
     }
 }

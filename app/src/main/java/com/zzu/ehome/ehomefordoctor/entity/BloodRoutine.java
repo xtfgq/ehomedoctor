@@ -9,6 +9,16 @@ public class BloodRoutine {
     private String ItemUnit;
     private String ItemRange;
 
+    public String getAdvice() {
+        return Advice;
+    }
+
+    public void setAdvice(String advice) {
+        Advice = advice;
+    }
+
+    private String Advice;
+
 
     private String ItemValue;
 

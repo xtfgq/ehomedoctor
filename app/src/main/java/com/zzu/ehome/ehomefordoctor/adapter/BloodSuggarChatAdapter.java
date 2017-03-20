@@ -96,7 +96,7 @@ public class BloodSuggarChatAdapter extends BaseAdapter implements StickyListHea
                         new TextAppearanceSpan(mContext, R.style.styleNormalColor), 3, xt.length() - 6, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
                 holder.tv_value.setText(style);
-                checkSuager(Float.valueOf(res.getBloodSugarValue()), holder.tv_status, res.getHoursAfterMeal(), holder.rl_status);
+                checkSuager(Float.valueOf(res.getBloodSugarValue()), holder.tv_status, time, holder.rl_status);
                 break;
             case 2:
                 DecimalFormat decimalFormat = new DecimalFormat("0.0");
@@ -108,7 +108,7 @@ public class BloodSuggarChatAdapter extends BaseAdapter implements StickyListHea
                         new TextAppearanceSpan(mContext, R.style.styleNormalColor), 3, xt2.length() - 6, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
                 holder.tv_value.setText(style2);
-                checkSuager(Float.valueOf(res.getBloodSugarValue()) / 18, holder.tv_status, res.getHoursAfterMeal(), holder.rl_status);
+                checkSuager(Float.valueOf(res.getBloodSugarValue()) / 18, holder.tv_status, time, holder.rl_status);
                 break;
 
         }

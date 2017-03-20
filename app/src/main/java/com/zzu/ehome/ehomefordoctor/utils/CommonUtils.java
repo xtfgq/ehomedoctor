@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.ParseException;
+import android.os.Environment;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -12,14 +13,20 @@ import android.widget.TextView;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.math.BigInteger;
 import java.security.MessageDigest;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,6 +34,9 @@ import java.util.Map;
 
 import io.rong.imkit.RongIM;
 import io.rong.imlib.RongIMClient;
+
+import static com.zzu.ehome.ehomefordoctor.db.DBHelper.mContext;
+import static io.rong.imageloader.core.ImageLoader.TAG;
 
 /**
  * Created by Administrator on 2016/4/9.
@@ -60,33 +70,41 @@ public class CommonUtils {
         context.finish();
 
     }
-  
+
 
 
     public static int computeSsz(int ssz) {
         if (ssz < 140) {
-            return 1;
+            if(ssz<=89){
+                return -1;
+            }else {
+                return 0;
+            }
         } else if (ssz >= 140 && ssz < 160) {
-            return 2;
+            return 1;
         } else if (ssz >= 160 && ssz < 180) {
-            return 3;
+            return 2;
         } else {
-            return 4;
+            return 3;
         }
 
     }
 
     public static int computeSzy(int szy) {
         if (szy < 90) {
-            return 1;
+            if(szy<=59){
+                return -1;
+            }else {
+                return 0;
+            }
         } else if (szy >= 90 && szy < 100) {
-            return 2;
+            return 1;
 
         } else if (szy >= 100 && szy < 110) {
-            return 3;
+            return 2;
 
         } else {
-            return 4;
+            return 3;
 
         }
 
@@ -95,9 +113,17 @@ public class CommonUtils {
     public static int MaxInt(int lvssz, int lvszy) {
         if (lvssz != lvszy) {
             if (lvssz > lvszy) {
-                return lvssz;
+                if(lvssz==0&&lvszy==-1){
+                    return -1;
+                }else {
+                    return lvssz;
+                }
             } else {
-                return lvszy;
+                if(lvssz==-1&&lvszy==0){
+                    return -1;
+                }else {
+                    return lvszy;
+                }
             }
         } else {
             return lvssz;
@@ -343,6 +369,55 @@ public class CommonUtils {
 
         }
         return labels;
+    }
+    /**
+     * 保存错误信息到文件中
+     *
+     * @param ex
+     * @return 返回文件名称, 便于将文件传送到服务器
+     */
+    public static  String saveCrashInfo2File(Throwable ex) {
+      Map<String, String> infos = new HashMap<String, String>();
+        StringBuffer sb = new StringBuffer();
+        for (Map.Entry<String, String> entry : infos.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            sb.append(key + "=" + value + "\n");
+        }
+
+        Writer writer = new StringWriter();
+        PrintWriter printWriter = new PrintWriter(writer);
+        ex.printStackTrace(printWriter);
+        Throwable cause = ex.getCause();
+        while (cause != null) {
+            cause.printStackTrace(printWriter);
+            cause = cause.getCause();
+        }
+        printWriter.close();
+        String result = writer.toString();
+        Log.e("RESULT", result);
+
+        sb.append(result);
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+        try {
+            long timestamp = System.currentTimeMillis();
+            String time = formatter.format(new Date());
+            String fileName = "crash-" + time + "-" + timestamp + ".log";
+            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                String path = "/sdcard/edcrash/";
+                File dir = new File(path);
+                if (!dir.exists()) {
+                    dir.mkdirs();
+                }
+                FileOutputStream fos = new FileOutputStream(path + fileName);
+                fos.write(sb.toString().getBytes());
+                fos.close();
+            }
+            return fileName;
+        } catch (Exception e) {
+            Log.e(TAG, "an error occured while writing file...", e);
+        }
+        return null;
     }
 
 

@@ -35,6 +35,7 @@ public class DialogUtils {
         dialog.setContentView(dialogView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
         dialog.show();
+        dialog.setCancelable(false);
         return dialog;
     }
 }

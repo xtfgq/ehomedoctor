@@ -6,8 +6,7 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
     <include layout="@layout/layout_toolbar" />
-    <include
-        layout="@layout/chat_common_layout" />
+
 
     <LinearLayout
         android:layout_width="match_parent"

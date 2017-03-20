@@ -26,6 +26,7 @@ public class App extends Application {
     public static List<Activity> mList = new LinkedList<Activity>();
     private static App mApp;
     public  static int count;
+    public static boolean isOnline=true;
 
 
     public static App getInstance() {
@@ -113,5 +114,38 @@ public class App extends Application {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    /**
+     * 结束指定类名的Activity 在遍历一个列表的时候不能执行删除操作，所有我们先记住要删除的对象，遍历之后才去删除。
+     */
+    public static void finishSingleActivityByClass(Class cls) {
+        Activity tempActivity = null;
+        for (Activity activity : mList) {
+            if (activity.getClass().equals(cls)) {
+                tempActivity = activity;
+            }
+        }
+
+        finishSingleActivity(tempActivity);
+    }
+    /**
+     * 结束指定的Activity
+     */
+    public static void finishSingleActivity(Activity activity) {
+        if (activity != null) {
+            if (mList.contains(activity)) {
+                mList.remove(activity);
+            }
+            activity.finish();
+            activity = null;
+        }
+    }
+
+    public  Activity getStackTopActivity()
+    {
+        if (mList.isEmpty()) {
+            return null;
+        }
+        return mList.get(mList.size()-1);
     }
 }

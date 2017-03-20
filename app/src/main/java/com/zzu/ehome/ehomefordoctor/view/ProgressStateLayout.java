@@ -17,6 +17,8 @@ import com.zzu.ehome.ehomefordoctor.R;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.baidu.location.h.i.V;
+
 /**
  * Created by Mersens on 2016/10/2.
  * 用于网络请求中的四种状态之间相互切换
@@ -139,6 +141,9 @@ public class ProgressStateLayout extends RelativeLayout {
         if (!TextUtils.isEmpty(msg)) {
             TextView tv_msg = (TextView) viewEmpty.findViewById(R.id.text_nodata_tips);
             tv_msg.setText(msg);
+        }else{
+            TextView tv_msg1= (TextView) viewEmpty.findViewById(R.id.text_nodata_tips);
+            tv_msg1.setVisibility(View.GONE);
         }
 
     }
