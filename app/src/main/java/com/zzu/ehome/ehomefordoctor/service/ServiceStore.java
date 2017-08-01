@@ -57,9 +57,9 @@ public interface ServiceStore {
 
     @Headers({
             "Content-Type: text/xml; charset=utf-8",
-            "SOAPAction: http://www.topmd.cn/TopmdWeixin/HolterPDFInquiry"
+            "SOAPAction: http://tempuri.org/HolterPDFInquiry"
     })
-    @POST(Constans.JE_BASE_URL3+"/TopmdWeiXin.asmx")
+    @POST("WebServices/EhomeWebservice.asmx")
     Call<ResponseBody> getDynamicData(@retrofit2.http.Body String str);
 
     @Headers({

@@ -5,5 +5,5 @@ package com.zzu.ehome.ehomefordoctor.mvp.listener;
  */
 
 public interface IDynamicData {
-    void getDynamicData(String userid,OnCommonResultListener listener);
+    void getDynamicData(String userid,String cardNo,OnCommonResultListener listener);
 }

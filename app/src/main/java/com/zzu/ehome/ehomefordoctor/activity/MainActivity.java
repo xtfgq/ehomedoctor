@@ -47,11 +47,12 @@ import com.zzu.ehome.ehomefordoctor.utils.DialogUtils;
 import com.zzu.ehome.ehomefordoctor.utils.JsonTools;
 import com.zzu.ehome.ehomefordoctor.utils.SharePreferenceUtil;
 import com.zzu.ehome.ehomefordoctor.utils.ToastUtils;
-import com.zzu.ehome.ehomefordoctor.view.CommonDialog;
+
 import com.zzu.ehome.ehomefordoctor.view.DialogEnsureCancelView;
 import com.zzu.ehome.ehomefordoctor.view.DialogTips;
 import com.zzu.ehome.ehomefordoctor.view.HeadView;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import butterknife.BindView;
@@ -63,7 +64,7 @@ import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
 import io.rong.imlib.model.Message;
 import io.rong.imlib.model.UserInfo;
-import io.rong.push.notification.PushNotificationMessage;
+
 
 public class MainActivity extends BaseActivity implements IOnLineView, IOffLineView, IUpView {
     private static final int REQUEST_PERMISSION = 0;
@@ -139,8 +140,9 @@ public class MainActivity extends BaseActivity implements IOnLineView, IOffLineV
 //            public void onClick() {
 //             SharePreferenceUtil.getInstance(MainActivity.this).setUserId("");
 //                SharePreferenceUtil.getInstance(MainActivity.this).setRongToken("");
-//                App.getInstance().exit();
+//
 //                mHzOfflinePresenter.postOffline();
+//                startActivity(new Intent(MainActivity.this,LoginActivity.class));
 //                finish();
 //            }
 //        });
@@ -177,10 +179,11 @@ public class MainActivity extends BaseActivity implements IOnLineView, IOffLineV
         tv_dot = (TextView) findViewById(R.id.tv_dot);
 
         RongIM.getInstance().setCurrentUserInfo(new UserInfo(SharePreferenceUtil.getInstance(MainActivity.this).getUserId(),
-                SharePreferenceUtil.getInstance(MainActivity.this).getNICK(), Uri.parse(SharePreferenceUtil.getInstance(MainActivity.this).getRongHead())));
+                SharePreferenceUtil.getInstance(MainActivity.this).getNICK(),
+                Uri.parse(SharePreferenceUtil.getInstance(MainActivity.this).getRongHead())));
         RongIM.getInstance().setMessageAttachedUserInfo(true);
         initUnreadCountListener();
-
+        receiveMsg();
     }
 
     @OnClick({R.id.layout_msg, R.id.layout_hz, R.id.icon_state})
@@ -366,10 +369,12 @@ public class MainActivity extends BaseActivity implements IOnLineView, IOffLineV
         PackageManager pkgManager = getPackageManager();
         // 读写 sd card 权限非常重要, android6.0默认禁止的, 建议初始化之前就弹窗让用户赋予该权限
         boolean sdCardWritePermission =
-                pkgManager.checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, getPackageName()) == PackageManager.PERMISSION_GRANTED;
+                pkgManager.checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        getPackageName()) == PackageManager.PERMISSION_GRANTED;
         // read phone state用于获取 imei 设备信息
         boolean phoneSatePermission =
-                pkgManager.checkPermission(Manifest.permission.READ_PHONE_STATE, getPackageName()) == PackageManager.PERMISSION_GRANTED;
+                pkgManager.checkPermission(Manifest.permission.READ_PHONE_STATE, getPackageName()) ==
+                        PackageManager.PERMISSION_GRANTED;
         if (Build.VERSION.SDK_INT >= 23 && !sdCardWritePermission || !phoneSatePermission) {
             requestPermission();
         } else {
@@ -422,9 +427,13 @@ public class MainActivity extends BaseActivity implements IOnLineView, IOffLineV
             CommonApi.connent(token, new CommonApi.RongIMListener() {
                 @Override
                 public void OnSuccess(String userid) {
-                    RongIM.getInstance().getRongIMClient().setConnectionStatusListener(new MyConnectionStatusListener());
-                    RongIM.getInstance().setCurrentUserInfo(new UserInfo(SharePreferenceUtil.getInstance(MainActivity.this).getUserId(),
-                            SharePreferenceUtil.getInstance(MainActivity.this).getNICK(), Uri.parse(SharePreferenceUtil.getInstance(MainActivity.this).getRongHead())));
+                    RongIM.getInstance().getRongIMClient().setConnectionStatusListener(new
+                            MyConnectionStatusListener());
+                    RongIM.getInstance().setCurrentUserInfo(new UserInfo(
+                            SharePreferenceUtil.getInstance(MainActivity.this).getUserId(),
+                            SharePreferenceUtil.getInstance(MainActivity.this).getNICK(),
+                            Uri.parse(SharePreferenceUtil.
+                                    getInstance(MainActivity.this).getRongHead())));
                     RongIM.getInstance().setMessageAttachedUserInfo(true);
                     refreshList();
                 }
@@ -555,4 +564,22 @@ public class MainActivity extends BaseActivity implements IOnLineView, IOffLineV
             }
         });
     }
+    /**
+     * 接收消息
+     */
+    private void receiveMsg() {
+        RongIMClient.setOnReceiveMessageListener(new RongIMClient.OnReceiveMessageListener() {
+            /**
+             * 收到消息的处理。
+             * @param message 收到的消息实体。
+             * @param i       剩余未拉取消息数目。
+             * @return 是否接收
+             */
+            @Override
+            public boolean onReceived(final Message message, int i) {
+                return false;
+            }
+        });
+    }
+
 }

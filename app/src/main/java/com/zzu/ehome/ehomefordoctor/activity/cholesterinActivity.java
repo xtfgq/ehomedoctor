@@ -41,7 +41,7 @@ import static com.zzu.ehome.ehomefordoctor.activity.MedicalRecordActivity.UserNo
  * Created by Administrator on 2016/10/27.
  */
 
-public class cholesterinActivity extends BaseActivity implements CholesterinDataView,ChHistoryView,StickyListHeadersListView.OnHeaderClickListener, StickyListHeadersListView.OnLoadingMoreLinstener {
+public class CholesterinActivity extends BaseActivity implements CholesterinDataView,ChHistoryView,StickyListHeadersListView.OnHeaderClickListener, StickyListHeadersListView.OnLoadingMoreLinstener {
     private LinearLayout heardchat;
     private int page;
     @BindView(R.id.lv_ua)
@@ -91,7 +91,7 @@ public class cholesterinActivity extends BaseActivity implements CholesterinData
         mCholesterinDataPresenter=new CholesterinDataPresenter(this);
         mChHistoryPresenter=new ChHistoryPresenter(this);
         inflater = LayoutInflater.from(this);
-        mAadpter = new CholChatAdapter(cholesterinActivity.this);
+        mAadpter = new CholChatAdapter(CholesterinActivity.this);
         heardchat = (LinearLayout) inflater.inflate(R.layout.layout_cholestenone_new_chat, null);
         mChart = (CholestenoneView) heardchat.findViewById(R.id.chart);
         tvnodata = (TextView) heardchat.findViewById(R.id.tvnodate);

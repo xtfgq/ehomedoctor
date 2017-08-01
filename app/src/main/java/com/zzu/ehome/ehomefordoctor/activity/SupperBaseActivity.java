@@ -93,6 +93,7 @@ public abstract class SupperBaseActivity extends FragmentActivity {
         super.onDestroy();
         stopProgressDialog();
         compositeSubscription.unsubscribe();
+        mHandler.removeCallbacksAndMessages(null);
     }
 
     @Override
@@ -278,6 +279,7 @@ public abstract class SupperBaseActivity extends FragmentActivity {
         dialog = null;
 
     }
+
     private void ExitAlter(final Context act){
         LayoutInflater inflater = LayoutInflater.from(act);
         View layout = inflater.inflate(R.layout.dialog_default_ensure_click, null);
@@ -306,6 +308,7 @@ public abstract class SupperBaseActivity extends FragmentActivity {
             }
         });
     }
+
 
 
 }

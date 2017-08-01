@@ -19,6 +19,7 @@ import com.zzu.ehome.ehomefordoctor.utils.SharePreferenceUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -27,6 +28,8 @@ import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Mersens on 2016/9/29.
@@ -52,6 +55,7 @@ public class IHzInfoImpl implements IHzInfo {
         String result = Node.getResult("MSUsersBySignDoctorInquiry", map);
         final ServiceStore service = manager.create(ServiceStore.class);
         Call<ResponseBody> call = service.getUsersBySign(result);
+
         manager.execute(call, new RequestManager.RequestCallBack() {
             @Override
             public void onSueecss(String msg) {

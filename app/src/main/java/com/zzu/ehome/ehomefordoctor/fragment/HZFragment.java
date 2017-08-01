@@ -194,7 +194,7 @@ public class HZFragment extends BaseFragment implements IHzInfoView {
         Log.e("onErroe",e.toString());
 //        CommonUtils.saveCrashInfo2File(e);
 //       ToastUtils.showMessage(getActivity(),e.toString());
-        progressStateLayout.showEmpty(R.mipmap.icon_none,"数据加载失败"+e.toString());
+//        progressStateLayout.showEmpty(R.mipmap.icon_none,"数据加载失败"+e.toString());
         progressStateLayout.showError(new ProgressStateLayout.ReloadListener() {
             @Override
             public void onClick() {

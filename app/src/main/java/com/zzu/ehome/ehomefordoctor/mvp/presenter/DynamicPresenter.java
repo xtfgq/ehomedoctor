@@ -17,7 +17,8 @@ public class DynamicPresenter {
         mIDynamicData=new IDynamicDataImpl();
     }
     public  void getDynamicData(){
-        mIDynamicData.getDynamicData(mIDynamicView.getUserid(), new OnCommonResultListener() {
+        mIDynamicData.getDynamicData(mIDynamicView.getUserid(),mIDynamicView.getNo(),
+                new OnCommonResultListener() {
             @Override
             public <T> void onSuccess(T t) {
                 mIDynamicView.onSuccess(t);

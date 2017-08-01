@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.zzu.ehome.ehomefordoctor.R;
 import com.zzu.ehome.ehomefordoctor.entity.ECGDynamicBean;
+import com.zzu.ehome.ehomefordoctor.entity.StaticBean;
 
 import java.util.List;
 
@@ -14,11 +15,11 @@ import java.util.List;
  * Created by Mersens on 2016/10/26.
  */
 
-public class ECGReportAdapter extends BaseListAdapter<ECGDynamicBean> {
-    private List<ECGDynamicBean> mList;
+public class ECGReportAdapter extends BaseListAdapter<StaticBean> {
+    private List<StaticBean> mList;
     private Context mContext;
 
-    public ECGReportAdapter(Context context, List<ECGDynamicBean> objects) {
+    public ECGReportAdapter(Context context, List<StaticBean> objects) {
         super(context, objects);
         this.mList = objects;
         this.mContext = context;
@@ -38,8 +39,8 @@ public class ECGReportAdapter extends BaseListAdapter<ECGDynamicBean> {
             holder = (ViewHolder) convertView.getTag();
         }
         holder.tvtitle.setText("动态心电报告");
-        final ECGDynamicBean item = getItem(position);
-        holder.name.setText(mList.get(position).getUpdatedDate());
+        final StaticBean item = getItem(position);
+        holder.name.setText(mList.get(position).getReportTime());
         return convertView;
     }
 

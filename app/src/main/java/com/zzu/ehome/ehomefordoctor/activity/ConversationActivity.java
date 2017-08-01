@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -92,10 +93,12 @@ public class ConversationActivity extends BaseActivity implements RongIM.Locatio
                 if(url.contains("vine.gif")){
                     url="";
                 }else{
-                    url= Constans.JE_BASE_URL3 + url.replace("~", "").replace("\\", "/");
-
+                    if(!TextUtils.isEmpty(url)) {
+                        url = Constans.JE_BASE_URL3 + url.replace("~", "").replace("\\", "/");
+                        RongIM.getInstance().refreshUserInfoCache(new UserInfo(user.getUserid(), user.getUsername(), Uri.parse(url)));
+                    }
                 }
-                RongIM.getInstance().refreshUserInfoCache(new UserInfo(user.getUserid(), user.getUsername(), Uri.parse(url)));
+
             }
         });
     }

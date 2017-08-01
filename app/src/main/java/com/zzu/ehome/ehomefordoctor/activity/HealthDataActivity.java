@@ -67,7 +67,7 @@ public class HealthDataActivity extends BaseActivity {
                 initAction(UricacidActivity.class);
                 break;
             case R.id.layout_dgc:
-                initAction(cholesterinActivity.class);
+                initAction(CholesterinActivity.class);
                 break;
 //            case R.id.layout_xcg:
 //                initAction(InspectionReportActivity.class);

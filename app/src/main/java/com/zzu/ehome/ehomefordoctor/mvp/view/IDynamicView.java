@@ -6,6 +6,7 @@ package com.zzu.ehome.ehomefordoctor.mvp.view;
 
 public interface IDynamicView {
     String getUserid();
+    String  getNo();
     <T>void onSuccess(T t);
     void onError(String error);
 }

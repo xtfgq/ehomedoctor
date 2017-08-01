@@ -84,7 +84,7 @@
         <activity android:name=".activity.NewPressActvity"/>
         <activity android:name=".activity.UricacidActivity"/>
         <activity android:name=".activity.FindPsdActivity"/>
-        <activity android:name=".activity.cholesterinActivity"/>
+        <activity android:name=".activity.CholesterinActivity"/>
         <activity android:name=".activity.InspectionReportActivity"/>
         <activity android:name=".activity.InspectionReportDetailActivity"/>
         <activity android:name=".activity.ECGPDFStaticActivity"/>
@@ -271,14 +271,14 @@
 
             </intent-filter>
         </receiver>
-        <!-- 正式服务-->
+<!--        &lt;!&ndash; 正式服务&ndash;&gt;
 <meta-data
             android:name="RONG_CLOUD_APP_KEY"
-            android:value="x18ywvqf8xjpc" />
+            android:value="x18ywvqf8xjpc" />-->
 <!--     &lt;!&ndash;  测试服务&ndash;&gt;-->
-<!--<meta-data
+<meta-data
               android:name="RONG_CLOUD_APP_KEY"
-              android:value="e0x9wycfxehzq" />-->
+              android:value="e0x9wycfxehzq" />
         <service
             android:name="io.rong.imlib.ipc.RongService"
             android:exported="true"

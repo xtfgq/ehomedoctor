@@ -57,8 +57,7 @@ public class LoginActivity extends BaseActivity implements ILoginView {
         setLeftWithTitleViewMethod(R.mipmap.icon_arrow_left, "登录", new HeadView.OnLeftClickListener() {
             @Override
             public void onClick() {
-                App.getInstance().exit();
-                finish();
+                confirmExit();
             }
         });
         presenter = new LoginPresenter(this);

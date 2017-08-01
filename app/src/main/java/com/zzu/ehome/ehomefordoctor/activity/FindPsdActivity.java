@@ -15,7 +15,7 @@ import com.zzu.ehome.ehomefordoctor.R;
 import com.zzu.ehome.ehomefordoctor.app.CommonApi;
 import com.zzu.ehome.ehomefordoctor.db.EHomeDao;
 import com.zzu.ehome.ehomefordoctor.db.EHomeDaoImpl;
-import com.zzu.ehome.ehomefordoctor.mvp.listener.IGetCodeData;
+
 import com.zzu.ehome.ehomefordoctor.mvp.presenter.CheckInfoPresenter;
 import com.zzu.ehome.ehomefordoctor.mvp.presenter.IGetCodePresenter;
 import com.zzu.ehome.ehomefordoctor.mvp.presenter.IMSDoctorFindPsdPresenter;
@@ -42,7 +42,8 @@ import static com.igexin.push.core.a.n;
  * Created by Administrator on 2016/10/28.
  */
 
-public class FindPsdActivity extends BaseActivity implements ICheckInfoView,IGetCodeView,IMsDoctorFindPassView{
+public class FindPsdActivity extends BaseActivity implements ICheckInfoView,IGetCodeView,
+        IMsDoctorFindPassView{
 
 
     @BindView(R.id.tv_getCode)
@@ -82,7 +83,6 @@ public class FindPsdActivity extends BaseActivity implements ICheckInfoView,IGet
         setContentView(R.layout.layout_findpsd);
         dao = new EHomeDaoImpl(FindPsdActivity.this);
         ButterKnife.bind(this);
-
         init();
     }
 
@@ -159,7 +159,6 @@ public class FindPsdActivity extends BaseActivity implements ICheckInfoView,IGet
         if (message.equals("ok")) {
             mIMSDoctorFindPsdPresenter.getFindPsd();
         } else {
-            //ToastUtils.showMessage(FindPsdActivity.this, message);
             show(message);
         }
 

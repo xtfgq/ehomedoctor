@@ -18,6 +18,16 @@ public class StaticBean {
 
     @SerializedName("ReportTime")
     private String ReportTime;
+    public String getReportType() {
+        return ReportType;
+    }
+
+    public void setReportType(String reportType) {
+        ReportType = reportType;
+    }
+
+    @SerializedName("ReportType")
+    private String ReportType;
 
     public String getCardNO() {
         return CardNO;

@@ -16,9 +16,14 @@ import com.zzu.ehome.ehomefordoctor.R;
 import com.zzu.ehome.ehomefordoctor.activity.ECGDetailsActivity;
 import com.zzu.ehome.ehomefordoctor.adapter.ECGReportAdapter;
 import com.zzu.ehome.ehomefordoctor.app.Constans;
+import com.zzu.ehome.ehomefordoctor.db.EHomeDao;
+import com.zzu.ehome.ehomefordoctor.db.EHomeDaoImpl;
 import com.zzu.ehome.ehomefordoctor.entity.ECGDynamicBean;
+import com.zzu.ehome.ehomefordoctor.entity.StaticBean;
+import com.zzu.ehome.ehomefordoctor.entity.StaticDate;
 import com.zzu.ehome.ehomefordoctor.mvp.presenter.DynamicPresenter;
 import com.zzu.ehome.ehomefordoctor.mvp.view.IDynamicView;
+import com.zzu.ehome.ehomefordoctor.utils.DateUtils;
 import com.zzu.ehome.ehomefordoctor.view.ProgressStateLayout;
 
 import java.util.List;
@@ -39,16 +44,19 @@ public class DynamicFragment extends BaseFragment implements IDynamicView {
     SwipeRefreshLayout swipeRefreshLayout;
     private View mView;
     private DynamicPresenter presenter;
-    private String userid;
+    private String userid,cardno;
     public static final String USERID="userid";
+    public static final String CARDNO = "cardno";
     private ECGReportAdapter adapter;
-    private List<ECGDynamicBean> list;
+    private List<StaticBean> list;
+    private EHomeDao dao;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.layout_bsae_list, null);
         ButterKnife.bind(this, view);
+
         return view;
     }
 
@@ -62,6 +70,7 @@ public class DynamicFragment extends BaseFragment implements IDynamicView {
     @Override
     public void init() {
         userid=getArguments().getString(USERID);
+        cardno=getArguments().getString(CARDNO);
         presenter=new DynamicPresenter(this);
         presenter.getDynamicData();
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -73,28 +82,25 @@ public class DynamicFragment extends BaseFragment implements IDynamicView {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                final ECGDynamicBean item = adapter.getItem(position);
+                final StaticBean item = adapter.getItem(position);
                 Intent i = new Intent(getActivity(), ECGDetailsActivity.class);
-                i.putExtra("Result", item.getReportResult());
-                i.putExtra("Fid",item.getFid());
-                i.putExtra("username",item.getRealName());
-                if(!TextUtils.isEmpty(item.getReportURL())){
-                    i.putExtra("Download", item.getReportURL());
-                }else{
-                    i.putExtra("Download", Constans.Download +item.getFilePathRelative());
-                }
-                i.putExtra("FileMD5", item.getFileMD5());
+                i.putExtra("Result", item.getECGResult());
+                i.putExtra("Download", item.getReportURL());
                 i.putExtra("ReportType", item.getReportType());
-                i.putExtra("time", com.zzu.ehome.ehomefordoctor.utils.DateUtils.StringPattern(item.getUpdatedDate(), "yyyy/MM/dd HH:mm:ss", "yyyy/MM/dd"));
+                i.putExtra("username", item.getRealName());
+                i.putExtra("time", DateUtils.StringPattern(item.getReportTime(),
+                        "yyyy/MM/dd HH:mm:ss", "yyyy/MM/dd"));
                 startActivity(i);
             }
         });
     }
 
-    public static Fragment getInstance(String userid) {
+    public static Fragment getInstance(String userid,String cardno) {
         DynamicFragment fragment=new DynamicFragment();
         Bundle bundle=new Bundle();
         bundle.putString(USERID,userid);
+
+        bundle.putString(CARDNO, cardno);
         fragment.setArguments(bundle);
         return fragment ;
     }
@@ -103,14 +109,19 @@ public class DynamicFragment extends BaseFragment implements IDynamicView {
 
     @Override
     public String getUserid() {
-//        userid = "51223";
+
         return userid;
+    }
+
+    @Override
+    public String getNo() {
+        return cardno;
     }
 
     @Override
     public <T> void onSuccess(T t) {
         swipeRefreshLayout.setRefreshing(false);
-        list=(List<ECGDynamicBean>)t;
+        list=(List<StaticBean>)t;
             if(list!=null && list.size()>0){
                 adapter = new ECGReportAdapter(getActivity(), list);
                 listView.setAdapter(adapter);

@@ -4,11 +4,14 @@ import android.util.Log;
 
 import com.zzu.ehome.ehomefordoctor.entity.ECGDate;
 import com.zzu.ehome.ehomefordoctor.entity.ECGDynamicBean;
+import com.zzu.ehome.ehomefordoctor.entity.StaticBean;
+import com.zzu.ehome.ehomefordoctor.entity.StaticDate;
 import com.zzu.ehome.ehomefordoctor.mvp.listener.IDynamicData;
 import com.zzu.ehome.ehomefordoctor.mvp.listener.OnCommonResultListener;
 import com.zzu.ehome.ehomefordoctor.service.ServiceStore;
 import com.zzu.ehome.ehomefordoctor.utils.ECGNode;
 import com.zzu.ehome.ehomefordoctor.utils.JsonTools;
+import com.zzu.ehome.ehomefordoctor.utils.Node;
 import com.zzu.ehome.ehomefordoctor.utils.RequestManager;
 
 import org.json.JSONArray;
@@ -35,12 +38,13 @@ public class IDynamicDataImpl implements IDynamicData {
 
 
     @Override
-    public void getDynamicData(String userid, final OnCommonResultListener listener) {
+    public void getDynamicData(String userid,String cardno, final OnCommonResultListener listener) {
         Map<String,String> map=new HashMap<>();
         map.put("UserID",userid);
+        map.put("CardNO",cardno);
         map.put("StartDate","");
         map.put("EndDate","");
-        String result= ECGNode.getResult("HolterPDFInquiry",map);
+        String result= Node.getResult("HolterPDFInquiry",map);
         final ServiceStore service= manager.create(ServiceStore.class);
         Call<ResponseBody> call=service.getDynamicData(result);
         manager.execute(call, new RequestManager.RequestCallBack() {
@@ -49,16 +53,16 @@ public class IDynamicDataImpl implements IDynamicData {
                 try {
                     Log.e("MSG",msg);
                     JSONObject mySO = new JSONObject(msg);
-                    JSONArray array = mySO.getJSONArray("Result");
-                    int code = Integer.valueOf(array.getJSONObject(0).getString("MessageCode"));
-                    if(code!=0){
-                        JSONObject mySORel = array.getJSONObject(0).getJSONObject("MessageContent").getJSONObject("resultDetail");
-                        ECGDate date = JsonTools.getData(mySORel.toString(), ECGDate.class);
-                        List<ECGDynamicBean> list = date.getData();
-                        listener.onSuccess(list);
-                    }else{
+                    JSONArray array = mySO.getJSONArray("GetElectrocardio");
+
+                    if (array.getJSONObject(0).has("MessageCode")) {
                         listener.onSuccess(null);
+                    }else{
+                        StaticDate date = JsonTools.getData(msg, StaticDate.class);
+                        List<StaticBean> list = date.getData();
+                        listener.onSuccess(list);
                     }
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                     listener.onError(e);

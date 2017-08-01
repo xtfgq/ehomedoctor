@@ -81,7 +81,7 @@ public class ECGActivity extends BaseActivity {
         Fragment fragment = null;
         switch (type) {
             case DYNAMIC:
-                fragment = DynamicFragment.getInstance(mTargetId);
+                fragment = DynamicFragment.getInstance(mTargetId,mUserNo);
                 break;
 
             case STATIC_STATE:

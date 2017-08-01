@@ -10,6 +10,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -100,8 +101,9 @@ public class ECGDetailsActivity extends BaseActivity {
 
         status = mIntent.getStringExtra("ReportType");
         username=mIntent.getStringExtra("username");
-        filename = mIntent.getStringExtra("Fid").trim()+".pdf";
+
         url = ( mIntent.getStringExtra("Download")).replace("\\", "/");
+        filename = url.substring(url.lastIndexOf("/") + 1, url.length());
         try {
             url = new String(url.getBytes("UTF-8"));
             url= URLEncoder.encode(url,"utf-8").replaceAll("\\+", "%20");
@@ -113,17 +115,25 @@ public class ECGDetailsActivity extends BaseActivity {
         downloadManager = DownloadService.getDownloadManager();
         downloadManager.setTargetFolder(DOWM_FOLDER);
         downloadInfo = downloadManager.getDownloadInfo(url);
+        if(TextUtils.isEmpty(status)){
+            tvStatu.setVisibility(View.GONE);
+        }else{
+            tvStatu.setText(status);
+            if (status.contains("低")) {
+                tvStatu.setTextColor(Color.parseColor("#00c07d"));
+            } else if (status.contains("中")) {
+                tvStatu.setTextColor(Color.parseColor("#fb9c2e"));
+            } else if (status.contains("高")) {
+                tvStatu.setTextColor(Color.parseColor("#f95935"));
+            }
+        }
 
-        tvStatu.setText(status);
         tvtime.setText(mIntent.getStringExtra("time"));
         tvname.setText(username);
-        if (status.contains("低")) {
-            tvStatu.setTextColor(Color.parseColor("#00c07d"));
-        } else if (status.contains("中")) {
-            tvStatu.setTextColor(Color.parseColor("#fb9c2e"));
-        } else if (status.contains("高")) {
-            tvStatu.setTextColor(Color.parseColor("#f95935"));
-        }
+        tvresult.setText(mIntent.getStringExtra("Result"));
+
+
+
         lineProgress.setVisibility(View.GONE);
         if (downloadInfo != null) {
             if(downloadInfo.getState() == DownloadManager.FINISH){

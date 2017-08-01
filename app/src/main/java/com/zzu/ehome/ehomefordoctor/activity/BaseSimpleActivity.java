@@ -22,7 +22,6 @@ public abstract class BaseSimpleActivity extends SupperBaseActivity {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-
     }
 
 
